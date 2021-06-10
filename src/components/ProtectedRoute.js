@@ -13,14 +13,7 @@ export default function ProtectedRoute({
                 if (isAuth) {
                     return <Component />
                 }
-                return (
-                    <Redirect
-                        to={{
-                            pathname: "/sign-in",
-                            state: { from: props.location }
-                        }}
-                    />
-                )
+                return <Redirect to={"/sign-in"} />
             }}
         />
     )

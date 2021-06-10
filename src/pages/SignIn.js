@@ -5,7 +5,7 @@ import Button from "@material-ui/core/Button"
 import TextField from "@material-ui/core/TextField"
 
 const SignIn = () => {
-    const { user, signIn, signOut } = useAuth()
+    const { user, signIn, signOut, signUpGoogle } = useAuth()
     const [email, setEmail] = useState()
     const [password, setPassword] = useState()
 
@@ -24,6 +24,14 @@ const SignIn = () => {
             console.log(error)
         }
     }
+    const loginGoogle = () => {
+        try {
+            signUpGoogle()
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     const logout = () => {
         signOut()
     }
@@ -48,6 +56,15 @@ const SignIn = () => {
                 }}
             >
                 Sign In
+            </Button>
+            <Button
+                variant="contained"
+                color="primary"
+                onClick={() => {
+                    loginGoogle()
+                }}
+            >
+                Sign In With Google
             </Button>
             <Button
                 variant="contained"

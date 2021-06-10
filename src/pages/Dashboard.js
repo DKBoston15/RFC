@@ -1,6 +1,6 @@
 import React from "react"
 
-const Users = () => {
+const Dashboard = () => {
     return (
         <div>
             <p>You are logged in!</p>
@@ -8,4 +8,4 @@ const Users = () => {
     )
 }
 
-export default Users
+export default Dashboard

@@ -5,9 +5,10 @@ import { useAuth } from "./config/auth"
 import ProtectedRoute from "./components/ProtectedRoute"
 
 //Pages
+import Home from "./pages/Home"
 import SignUp from "./pages/SignUp"
 import SignIn from "./pages/SignIn"
-import Users from "./pages/Users"
+import Dashboard from "./pages/Dashboard"
 
 export default function App() {
     const { user } = useAuth()
@@ -26,14 +27,14 @@ export default function App() {
                             <Link to="/sign-in">Sign In</Link>
                         </li>
                         <li>
-                            <Link to="/users">Users</Link>
+                            <Link to="/dashboard">Dashboard</Link>
                         </li>
                     </ul>
                 </nav>
                 <Switch>
                     <ProtectedRoute
-                        path="/users"
-                        component={Users}
+                        path="/dashboard"
+                        component={Dashboard}
                         isAuth={user}
                     />
                     <Route path="/sign-up">
@@ -49,8 +50,4 @@ export default function App() {
             </div>
         </Router>
     )
-}
-
-function Home() {
-    return <h2>Home</h2>
 }
