@@ -1,7 +1,17 @@
 import React from "react"
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom"
+import { useAuth } from "./config/auth"
+
+import ProtectedRoute from "./components/ProtectedRoute"
+
+//Pages
+import Home from "./pages/Home"
+import SignUp from "./pages/SignUp"
+import SignIn from "./pages/SignIn"
+import Dashboard from "./pages/Dashboard"
 
 export default function App() {
+    const { user } = useAuth()
     return (
         <Router>
             <div>
@@ -11,22 +21,27 @@ export default function App() {
                             <Link to="/">Home</Link>
                         </li>
                         <li>
-                            <Link to="/login">Login</Link>
+                            <Link to="/sign-up">Sign Up</Link>
                         </li>
                         <li>
-                            <Link to="/users">Users</Link>
+                            <Link to="/sign-in">Sign In</Link>
+                        </li>
+                        <li>
+                            <Link to="/dashboard">Dashboard</Link>
                         </li>
                     </ul>
                 </nav>
-
-                {/* A <Switch> looks through its children <Route>s and
-            renders the first one that matches the current URL. */}
                 <Switch>
-                    <Route path="/about">
-                        <Login />
+                    <ProtectedRoute
+                        path="/dashboard"
+                        component={Dashboard}
+                        isAuth={user}
+                    />
+                    <Route path="/sign-up">
+                        <SignUp />
                     </Route>
-                    <Route path="/users">
-                        <Users />
+                    <Route path="/sign-in">
+                        <SignIn />
                     </Route>
                     <Route path="/">
                         <Home />
@@ -35,16 +50,4 @@ export default function App() {
             </div>
         </Router>
     )
-}
-
-function Home() {
-    return <h2>Home</h2>
-}
-
-function Login() {
-    return <h2>Login</h2>
-}
-
-function Users() {
-    return <h2>Users</h2>
 }
