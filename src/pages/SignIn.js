@@ -85,7 +85,8 @@ const useStyles = makeStyles({
 
 const SignIn = () => {
     const classes = useStyles()
-    const { signIn, signOut, signUpGoogle, resetPassword } = useAuth()
+    // const { signIn, signOut, signUpGoogle, resetPassword } = useAuth()
+    const { signIn, signUpGoogle } = useAuth()
     const [signUpFormDisplay, setSignUpFormDisplay] = useState(false)
     const [email, setEmail] = useState()
     const [password, setPassword] = useState()
@@ -115,12 +116,12 @@ const SignIn = () => {
             console.log(error)
         }
     }
-    const logout = () => {
-        signOut()
-    }
-    const resetPass = () => {
-        resetPassword(email)
-    }
+    // const logout = () => {
+    //     signOut()
+    // }
+    // const resetPass = () => {
+    //     resetPassword(email)
+    // }
 
     return (
         <Box className={classes.root}>
