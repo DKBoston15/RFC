@@ -36,6 +36,10 @@ export const AuthProvider = ({ children }) => {
         signUpGoogle: () => supabase.auth.signIn({ provider: "google" }),
         signIn: (data) => supabase.auth.signIn(data),
         signOut: () => supabase.auth.signOut(),
+        resetPassword: (data) =>
+            supabase.auth.api.resetPasswordForEmail(data, {
+                redirectTo: `http://localhost:3000/reset-password`
+            }),
         user
     }
 
