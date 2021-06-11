@@ -1,5 +1,4 @@
 import React, { useEffect } from "react"
-import { useAuth } from "../config/auth"
 import { useHistory } from "react-router-dom"
 import queryString from "query-string"
 
