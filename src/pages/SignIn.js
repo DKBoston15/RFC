@@ -1,5 +1,6 @@
 import React, { useState } from "react"
 import { useAuth } from "../config/auth"
+import { useHistory } from "react-router-dom"
 import { makeStyles } from "@material-ui/core/styles"
 
 import { Box, Button, TextField, Typography, SvgIcon } from "@material-ui/core"
@@ -80,12 +81,15 @@ const useStyles = makeStyles({
     }
 })
 
+// TODO: Finish setting up Sign in with Email form & validation
+
 const SignIn = () => {
     const classes = useStyles()
     const { signIn, signOut, signUpGoogle, resetPassword } = useAuth()
     const [signUpFormDisplay, setSignUpFormDisplay] = useState(false)
     const [email, setEmail] = useState()
     const [password, setPassword] = useState()
+    let history = useHistory()
 
     const onEmailChange = (e) => {
         setEmail(e.target.value)
@@ -97,6 +101,9 @@ const SignIn = () => {
         console.log("Logging In")
         try {
             signIn({ email: email, password: password })
+            setTimeout(() => {
+                history.push("/dashboard")
+            }, 1000)
         } catch (error) {
             console.log(error)
         }
