@@ -93,7 +93,7 @@ export default function Home() {
             }
         }
         handleUser()
-    }, [user])
+    }, [user, history])
     return (
         <Box className={classes.root}>
             <img src={Logo} alt="logo" className={classes.logo} />

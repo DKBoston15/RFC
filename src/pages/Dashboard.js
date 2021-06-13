@@ -1,7 +1,11 @@
-import React from "react"
+import React, { useState, useEffect } from "react"
 import { useAuth } from "../config/auth"
 import { Button, Box } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
+import Snackbar from "@material-ui/core/Snackbar"
+import Alert from "@material-ui/lab/Alert"
+import queryString from "query-string"
+import { useLocation } from "react-router-dom"
 
 const useStyles = makeStyles({
     root: {
@@ -39,22 +43,41 @@ const useStyles = makeStyles({
 const Dashboard = () => {
     const classes = useStyles()
     const { signOut } = useAuth()
+    const [openRecoveryMsg, setOpenRecoveryMsg] = useState(false)
+    const { search } = useLocation()
     const logout = () => {
         signOut()
     }
+    useEffect(() => {
+        const values = queryString.parse(search)
+        if (values.reset) {
+            setOpenRecoveryMsg(true)
+        }
+    }, [search])
     return (
-        <Box className={classes.root}>
-            <p>You are logged in!</p>
-            <Button
-                className={classes.buttonTwo}
-                variant="contained"
-                onClick={() => {
-                    logout()
-                }}
+        <>
+            <Box className={classes.root}>
+                <p>You are logged in!</p>
+                <Button
+                    className={classes.buttonTwo}
+                    variant="contained"
+                    onClick={() => {
+                        logout()
+                    }}
+                >
+                    Log Out
+                </Button>
+            </Box>
+            <Snackbar
+                open={openRecoveryMsg}
+                autoHideDuration={5000}
+                onClose={() => setOpenRecoveryMsg(false)}
             >
-                Log Out
-            </Button>
-        </Box>
+                <Alert severity="success" variant="filled">
+                    Password Successfully Reset
+                </Alert>
+            </Snackbar>
+        </>
     )
 }
 

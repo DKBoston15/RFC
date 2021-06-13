@@ -18,3 +18,14 @@ export const addUser = async (id) => {
     }
     return data
 }
+
+export const addUserRole = async (role, id) => {
+    const { data, error } = await supabase
+        .from("users")
+        .update({ role: role })
+        .eq("id", id)
+    if (error) {
+        return error
+    }
+    return data
+}
