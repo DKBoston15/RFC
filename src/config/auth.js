@@ -10,6 +10,7 @@ export const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
+        console.log("Context Loading")
         // get session data if there is an active session
         const session = supabase.auth.session()
 
@@ -33,7 +34,15 @@ export const AuthProvider = ({ children }) => {
     // create signUp, signIn, signOut functions
     const value = {
         signUp: (data) => supabase.auth.signUp(data),
-        signUpGoogle: () => supabase.auth.signIn({ provider: "google" }),
+        signUpGoogle: () =>
+            supabase.auth.signIn(
+                {
+                    provider: "google"
+                },
+                {
+                    redirectTo: "http://localhost:3000/"
+                }
+            ),
         signIn: (data) => supabase.auth.signIn(data),
         signOut: () => supabase.auth.signOut(),
         resetPassword: (data) =>
