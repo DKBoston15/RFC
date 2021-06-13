@@ -1,9 +1,10 @@
-import React from "react"
+import React, { useState, useEffect } from "react"
 import { Box, Typography } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
 import { useAuth } from "../config/auth"
 
 import WorkspaceForm from "../components/WorkspaceForm"
+import InviteTeamMates from "../components/InviteTeamates"
 
 const useStyles = makeStyles({
     container: {
@@ -24,6 +25,7 @@ const useStyles = makeStyles({
 export default function WorkspaceSetup() {
     const classes = useStyles()
     const { user } = useAuth()
+    const [workspaceSetupComplete, setWorkspaceSetupComplete] = useState(false)
 
     return (
         <>
@@ -43,7 +45,12 @@ export default function WorkspaceSetup() {
                     <Typography variant="subtitle2">Logout</Typography>
                 </Box>
             </Box>
-            <WorkspaceForm />
+            {!workspaceSetupComplete && (
+                <WorkspaceForm
+                    setWorkspaceSetupComplete={setWorkspaceSetupComplete}
+                />
+            )}
+            {workspaceSetupComplete && <InviteTeamMates />}
         </>
     )
 }

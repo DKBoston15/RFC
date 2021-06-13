@@ -43,12 +43,14 @@ const useStyles = makeStyles({
     button: {
         color: "white",
         minHeight: "48px",
-        backgroundColor: "rgba(44, 157, 219)",
+        background: "none",
+        border: "1px solid white",
         fontWeight: 600,
         width: "30vw",
         marginTop: "2em",
         "&:hover": {
-            backgroundColor: "rgba(44, 157, 219, 0.5)"
+            backgroundColor: "rgba(44, 157, 219, 1)",
+            border: "none"
         }
     },
     description: {
@@ -89,7 +91,7 @@ const useStyles = makeStyles({
     }
 })
 
-export default function WorkspaceForm({ setWorkspaceSetupComplete }) {
+export default function InviteTeamates() {
     const classes = useStyles()
     const [workspaceName, setWorkspaceName] = useState("")
     const [workspaceUrl, setworkspaceUrl] = useState("")
@@ -97,6 +99,8 @@ export default function WorkspaceForm({ setWorkspaceSetupComplete }) {
     const [role, setRole] = useState("")
     const [errorMessage, setErrorMessage] = useState("")
     const [openError, setOpenError] = useState(false)
+    const [additionalFields, setAdditionalFields] = useState([0])
+    const [addButtonDisplay, setAddButtonDisplay] = useState(true)
 
     const handleChange = (e) => {
         switch (e.target.name) {
@@ -116,30 +120,27 @@ export default function WorkspaceForm({ setWorkspaceSetupComplete }) {
                 break
         }
     }
-    const onSubmit = async () => {
-        let workspaceData = await addWorkspace(
-            workspaceName,
-            workspaceUrl,
-            companySize
-        )
-        console.log("Form Submitted")
-        if (workspaceData.status !== "error") {
-            console.log("Workspace Created")
-            setWorkspaceSetupComplete(true)
-        } else {
-            setErrorMessage(workspaceData.msg)
-            setOpenError(true)
+    const addMoreFields = () => {
+        let num = additionalFields.length - 1
+        let arr = [...additionalFields]
+        if (num + 1 === 3) {
+            setAddButtonDisplay(false)
+            return
         }
+        arr.push(num + 1)
+        setAdditionalFields(arr)
+        console.log(additionalFields)
     }
+
+    const onSubmit = async () => {}
     return (
         <Box className={classes.root}>
             <Typography variant="h4" className={classes.header}>
-                Create a new workspace
+                Invite Co-Workers to your team
             </Typography>
             <Typography variant="subtitle1" className={classes.description}>
-                Workspaces are shared environments where teams can collaborate
-                with their teams asynchronously to make impactful business
-                decisions.
+                RFC is meant to be used with your team. Invite some co-workers
+                to test it out with.
             </Typography>
             <Box className={classes.formContainer}>
                 <Box className={classes.inputContainer}>
@@ -147,9 +148,8 @@ export default function WorkspaceForm({ setWorkspaceSetupComplete }) {
                         variant="subtitle1"
                         className={classes.labelText}
                     >
-                        Workspace name
+                        Invite people to collaborate in RFC:
                     </Typography>
-
                     <TextField
                         className={classes.input}
                         id="outlined-basic"
@@ -158,90 +158,50 @@ export default function WorkspaceForm({ setWorkspaceSetupComplete }) {
                         value={workspaceName}
                         onChange={handleChange}
                     />
-                </Box>
-                <Box className={classes.inputContainer}>
-                    <Typography
-                        variant="subtitle1"
-                        className={classes.labelText}
-                    >
-                        Workspace Url
-                    </Typography>
-
                     <TextField
                         className={classes.input}
                         id="outlined-basic"
-                        name="workspaceUrl"
+                        name="workspaceName"
                         variant="outlined"
-                        placeholder="rfc.app/"
+                        value={workspaceName}
                         onChange={handleChange}
                     />
-                </Box>
-                <Box className={classes.inputContainer}>
-                    <Typography
-                        variant="subtitle1"
-                        className={classes.labelText}
-                    >
-                        How large is your company
-                    </Typography>
-                    <Select
-                        native
-                        name="companySize"
+                    <TextField
                         className={classes.input}
+                        id="outlined-basic"
+                        name="workspaceName"
                         variant="outlined"
+                        value={workspaceName}
                         onChange={handleChange}
-                        inputProps={{
-                            classes: {
-                                icon: classes.icon
-                            }
-                        }}
-                    >
-                        <option aria-label="None" value="" />
-                        <option value={"1 - 10"}>1 - 10</option>
-                        <option value={"11 - 50"}>11 - 50</option>
-                        <option value={"51 - 500"}>51 - 500</option>
-                        <option value={"501+"}>501+</option>
-                    </Select>
-                </Box>
-                <Box className={classes.inputContainer}>
-                    <Typography
-                        variant="subtitle1"
-                        className={classes.labelText}
-                    >
-                        What is your role?
-                    </Typography>
-
-                    <Select
-                        native
-                        name="role"
-                        className={classes.input}
-                        onChange={handleChange}
-                        variant="outlined"
-                        inputProps={{
-                            classes: {
-                                icon: classes.icon
-                            }
-                        }}
-                    >
-                        <option aria-label="None" value="" />
-                        <option value="Executive">Executive</option>
-                        <option value="Accounting">Accounting</option>
-                        <option value="Human Resources">Human Resources</option>
-                        <option value="Marketing">Marketing</option>
-                        <option value="Sales">Sales</option>
-                        <option value="Development">Development</option>
-                        <option value="Other">Other</option>
-                    </Select>
+                    />
+                    {additionalFields.map((number) => (
+                        <TextField
+                            className={classes.input}
+                            id="outlined-basic"
+                            name="workspaceName"
+                            key={number}
+                            variant="outlined"
+                            value={workspaceName}
+                            onChange={handleChange}
+                        />
+                    ))}
                 </Box>
             </Box>
+            {addButtonDisplay && (
+                <Button
+                    className={classes.button}
+                    variant="contained"
+                    onClick={() => addMoreFields()}
+                >
+                    Add More +
+                </Button>
+            )}
             <Button
                 className={classes.button}
                 variant="contained"
                 onClick={() => onSubmit()}
             >
-                Create Workspace
-            </Button>
-            <Button onClick={() => setWorkspaceSetupComplete(true)}>
-                SKIP (DEV)
+                Continue
             </Button>
             <Snackbar
                 open={openError}
