@@ -49,7 +49,10 @@ const useStyles = makeStyles({
 
 export default function Home() {
     const classes = useStyles()
-    const { user } = useAuth()
+    const { user, signOut } = useAuth()
+    const logout = () => {
+        signOut()
+    }
     return (
         <Box className={classes.root}>
             <img src={Logo} alt="logo" className={classes.logo} />
@@ -78,11 +81,25 @@ export default function Home() {
                 </>
             )}
             {user != null && (
-                <Link to="/dashboard">
-                    <Button className={classes.buttonOne} variant="contained">
-                        Dashboard
+                <>
+                    <Link to="/dashboard">
+                        <Button
+                            className={classes.buttonOne}
+                            variant="contained"
+                        >
+                            Dashboard
+                        </Button>
+                    </Link>
+                    <Button
+                        className={classes.buttonTwo}
+                        variant="contained"
+                        onClick={() => {
+                            logout()
+                        }}
+                    >
+                        Log Out
                     </Button>
-                </Link>
+                </>
             )}
         </Box>
     )

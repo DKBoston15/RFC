@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { useAuth } from "../config/auth"
-import { useHistory } from "react-router-dom"
+import { useHistory, Link } from "react-router-dom"
 import { makeStyles } from "@material-ui/core/styles"
 
 import { Box, Button, TextField, Typography, SvgIcon } from "@material-ui/core"
@@ -78,6 +78,19 @@ const useStyles = makeStyles({
         justifyContent: "center",
         alignItems: "center",
         marginTop: "2em"
+    },
+    link: {
+        textDecoration: "none",
+        color: "white",
+        "&:visited": {
+            textDecoration: "none"
+        },
+        "&:hover": {
+            textDecoration: "none"
+        },
+        "&:active": {
+            textDecoration: "none"
+        }
     }
 })
 
@@ -103,7 +116,7 @@ const SignIn = () => {
         try {
             signIn({ email: email, password: password })
             setTimeout(() => {
-                history.push("/dashboard")
+                history.push("/")
             }, 1000)
         } catch (error) {
             console.log(error)
@@ -116,9 +129,6 @@ const SignIn = () => {
             console.log(error)
         }
     }
-    // const logout = () => {
-    //     signOut()
-    // }
     // const resetPass = () => {
     //     resetPassword(email)
     // }
@@ -199,67 +209,12 @@ const SignIn = () => {
                     </Button>
                 </Box>
             )}
-            {/* <Typography
-                variant="body1"
-                align="center"
-                className={classes.disclaimerText}
-            >
-                By clicking “Continue with Google/Email” above, you acknowledge
-                that you have read and understood, and agree to RFC's terms &
-                conditions and privacy policy.
-            </Typography> */}
+            <Link to="/sign-up" className={classes.link}>
+                <Typography variant="body1" align="center">
+                    New User? Get Started Here
+                </Typography>
+            </Link>
         </Box>
-
-        // <div>
-        //     <TextField
-        //         id="standard-basic"
-        //         label="Email"
-        //         onChange={onEmailChange}
-        //     />
-        //     <TextField
-        //         id="filled-basic"
-        //         label="Password"
-        //         onChange={onPasswordChange}
-        //     />
-        //     <Button
-        //         variant="contained"
-        //         color="primary"
-        //         onClick={() => {
-        //             login()
-        //         }}
-        //     >
-        //         Sign In
-        //     </Button>
-        //     <Button
-        //         variant="contained"
-        //         color="primary"
-        //         onClick={() => {
-        //             loginGoogle()
-        //         }}
-        //     >
-        //         Sign In With Google
-        //     </Button>
-        //     <Button
-        //         variant="contained"
-        //         color="primary"
-        //         onClick={() => {
-        //             logout()
-        //         }}
-        //     >
-        //         Logout
-        //     </Button>
-        //     <h3>Forgot password? Reset Below</h3>
-        //     <TextField id="email" label="Email" onChange={onEmailChange} />
-        //     <Button
-        //         variant="contained"
-        //         color="primary"
-        //         onClick={() => {
-        //             resetPass()
-        //         }}
-        //     >
-        //         Reset Password
-        //     </Button>
-        // </div>
     )
 }
 

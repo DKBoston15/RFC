@@ -39,7 +39,7 @@ export const AuthProvider = ({ children }) => {
                     provider: "google"
                 },
                 {
-                    redirectTo: "http://localhost:3000/"
+                    redirectTo: "http://localhost:3000/email-confirmation"
                 }
             ),
         signIn: (data) => supabase.auth.signIn(data),
