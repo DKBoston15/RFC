@@ -33,7 +33,15 @@ export const AuthProvider = ({ children }) => {
     // create signUp, signIn, signOut functions
     const value = {
         signUp: (data) => supabase.auth.signUp(data),
-        signUpGoogle: () => supabase.auth.signIn({ provider: "google" }),
+        signUpGoogle: () =>
+            supabase.auth.signIn(
+                {
+                    provider: "google"
+                },
+                {
+                    redirectTo: "http://localhost:3000/"
+                }
+            ),
         signIn: (data) => supabase.auth.signIn(data),
         signOut: () => supabase.auth.signOut(),
         resetPassword: (data) =>

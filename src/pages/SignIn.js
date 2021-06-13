@@ -199,7 +199,7 @@ const SignIn = () => {
                     </Button>
                 </Box>
             )}
-            <Typography
+            {/* <Typography
                 variant="body1"
                 align="center"
                 className={classes.disclaimerText}
@@ -207,7 +207,7 @@ const SignIn = () => {
                 By clicking “Continue with Google/Email” above, you acknowledge
                 that you have read and understood, and agree to RFC's terms &
                 conditions and privacy policy.
-            </Typography>
+            </Typography> */}
         </Box>
 
         // <div>
