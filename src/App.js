@@ -14,6 +14,7 @@ import SignUp from "./pages/SignUp"
 import SignIn from "./pages/SignIn"
 import Dashboard from "./pages/Dashboard"
 import PasswordReset from "./pages/PasswordReset"
+import WorkspaceSetup from "./pages/WorkspaceSetup"
 
 import CssBaseline from "@material-ui/core/CssBaseline"
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles"
@@ -69,6 +70,11 @@ export default function App() {
                         </ul>
                     </nav> */}
                     <RouterSwitch>
+                        <ProtectedRoute
+                            path="/workspace-setup"
+                            component={WorkspaceSetup}
+                            isAuth={user}
+                        />
                         <Route path="/reset-password">
                             <PasswordReset />
                         </Route>

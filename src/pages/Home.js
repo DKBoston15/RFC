@@ -1,9 +1,12 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { makeStyles } from "@material-ui/core/styles"
 import { Button, Box, Typography } from "@material-ui/core"
-import { Link } from "react-router-dom"
+import { useHistory, Link } from "react-router-dom"
 import Logo from "../images/logo.svg"
 import { useAuth } from "../config/auth"
+import { addUser, getUserData } from "../utils/userUtils"
+import Snackbar from "@material-ui/core/Snackbar"
+import Alert from "@material-ui/lab/Alert"
 
 const useStyles = makeStyles({
     root: {
@@ -44,15 +47,53 @@ const useStyles = makeStyles({
         position: "absolute",
         left: "16%",
         top: "22%"
+    },
+    link: {
+        textDecoration: "none",
+        color: "white",
+        "&:visited": {
+            textDecoration: "none"
+        },
+        "&:hover": {
+            textDecoration: "none"
+        },
+        "&:active": {
+            textDecoration: "none"
+        }
     }
 })
 
 export default function Home() {
+    const history = useHistory()
     const classes = useStyles()
     const { user, signOut } = useAuth()
+    const [errorMessage, setErrorMessage] = useState("")
+    const [openError, setOpenError] = useState(false)
+
     const logout = () => {
         signOut()
     }
+    useEffect(() => {
+        const handleUser = async () => {
+            if (user) {
+                console.log(user)
+                let userData = await getUserData(user.id)
+                if (userData.status !== "error" && userData.length === 0) {
+                    if (user.id) {
+                        addUser(user.id)
+                        console.log("User Added")
+                    } else {
+                        setErrorMessage(userData.msg)
+                        setOpenError(true)
+                    }
+                }
+                if (userData[0].signup_flow_complete === false) {
+                    history.push("/workspace-setup")
+                }
+            }
+        }
+        handleUser()
+    }, [user])
     return (
         <Box className={classes.root}>
             <img src={Logo} alt="logo" className={classes.logo} />
@@ -62,7 +103,7 @@ export default function Home() {
                     <Typography variant="body1">
                         In order to access the dashboard, you need to login
                     </Typography>
-                    <Link to="/sign-up">
+                    <Link to="/sign-up" className={classes.link}>
                         <Button
                             className={classes.buttonOne}
                             variant="contained"
@@ -70,7 +111,7 @@ export default function Home() {
                             Sign Up
                         </Button>
                     </Link>
-                    <Link to="/sign-in">
+                    <Link to="/sign-in" className={classes.link}>
                         <Button
                             className={classes.buttonTwo}
                             variant="contained"
@@ -101,6 +142,15 @@ export default function Home() {
                     </Button>
                 </>
             )}
+            <Snackbar
+                open={openError}
+                autoHideDuration={5000}
+                onClose={() => setOpenError(false)}
+            >
+                <Alert severity="error" variant="filled">
+                    {errorMessage}
+                </Alert>
+            </Snackbar>
         </Box>
     )
 }

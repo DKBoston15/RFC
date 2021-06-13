@@ -115,9 +115,6 @@ const SignIn = () => {
         console.log("Logging In")
         try {
             signIn({ email: email, password: password })
-            setTimeout(() => {
-                history.push("/")
-            }, 1000)
         } catch (error) {
             console.log(error)
         }

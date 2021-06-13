@@ -10,6 +10,7 @@ export const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
+        console.log("Context Loading")
         // get session data if there is an active session
         const session = supabase.auth.session()
 
@@ -39,7 +40,7 @@ export const AuthProvider = ({ children }) => {
                     provider: "google"
                 },
                 {
-                    redirectTo: "http://localhost:3000/email-confirmation"
+                    redirectTo: "http://localhost:3000/"
                 }
             ),
         signIn: (data) => supabase.auth.signIn(data),
