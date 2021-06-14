@@ -26,6 +26,7 @@ export default function WorkspaceSetup() {
     const classes = useStyles()
     const { user } = useAuth()
     const [workspaceSetupComplete, setWorkspaceSetupComplete] = useState(false)
+    useEffect(() => {}, [workspaceSetupComplete])
 
     return (
         <>
@@ -47,6 +48,7 @@ export default function WorkspaceSetup() {
             </Box>
             {!workspaceSetupComplete && (
                 <WorkspaceForm
+                    user={user}
                     setWorkspaceSetupComplete={setWorkspaceSetupComplete}
                 />
             )}

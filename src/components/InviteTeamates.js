@@ -1,9 +1,11 @@
 import React, { useState } from "react"
-import { Box, Typography, TextField, Button, Select } from "@material-ui/core"
+import { Box, Typography, TextField, Button } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
-import { addWorkspace } from "../utils/workspaceUtils"
 import Snackbar from "@material-ui/core/Snackbar"
+import { useHistory } from "react-router-dom"
 import Alert from "@material-ui/lab/Alert"
+import { useForm, Controller } from "react-hook-form"
+import { inviteUser } from "../utils/lambdaUtils"
 
 const useStyles = makeStyles({
     root: {
@@ -32,7 +34,8 @@ const useStyles = makeStyles({
     },
     input: {
         minHeight: "48px",
-        width: "100%"
+        width: "100%",
+        marginTop: "1em"
     },
     icon: {
         fill: "white"
@@ -93,46 +96,31 @@ const useStyles = makeStyles({
 
 export default function InviteTeamates() {
     const classes = useStyles()
-    const [workspaceName, setWorkspaceName] = useState("")
-    const [workspaceUrl, setworkspaceUrl] = useState("")
-    const [companySize, setCompanySize] = useState("")
-    const [role, setRole] = useState("")
-    const [errorMessage, setErrorMessage] = useState("")
-    const [openError, setOpenError] = useState(false)
-    const [additionalFields, setAdditionalFields] = useState([0])
+    const history = useHistory()
+    const [invitedUsers, setInvitedUsers] = useState(false)
     const [addButtonDisplay, setAddButtonDisplay] = useState(true)
+    const [additionalFields, setAdditionalFields] = useState(0)
 
-    const handleChange = (e) => {
-        switch (e.target.name) {
-            case "workspaceName":
-                setWorkspaceName(e.target.value)
-                break
-            case "workspaceUrl":
-                setworkspaceUrl(e.target.value)
-                break
-            case "companySize":
-                setCompanySize(e.target.value)
-                break
-            case "role":
-                setRole(e.target.value)
-                break
-            default:
-                break
-        }
-    }
+    const { handleSubmit, control } = useForm()
+
     const addMoreFields = () => {
-        let num = additionalFields.length - 1
-        let arr = [...additionalFields]
-        if (num + 1 === 3) {
+        setAdditionalFields(additionalFields + 1)
+        if (additionalFields === 2) {
             setAddButtonDisplay(false)
-            return
         }
-        arr.push(num + 1)
-        setAdditionalFields(arr)
-        console.log(additionalFields)
     }
 
-    const onSubmit = async () => {}
+    const onSubmit = async (values) => {
+        for (const email in values) {
+            await inviteUser(encodeURIComponent(values[email]))
+            //Get User
+            //Add Workspace ID to User
+        }
+        setInvitedUsers(true)
+        setTimeout(() => {
+            history.push("/dashboard")
+        }, 1500)
+    }
     return (
         <Box className={classes.root}>
             <Typography variant="h4" className={classes.header}>
@@ -142,74 +130,127 @@ export default function InviteTeamates() {
                 RFC is meant to be used with your team. Invite some co-workers
                 to test it out with.
             </Typography>
-            <Box className={classes.formContainer}>
-                <Box className={classes.inputContainer}>
-                    <Typography
-                        variant="subtitle1"
-                        className={classes.labelText}
-                    >
-                        Invite people to collaborate in RFC:
-                    </Typography>
-                    <TextField
-                        className={classes.input}
-                        id="outlined-basic"
-                        name="workspaceName"
-                        variant="outlined"
-                        value={workspaceName}
-                        onChange={handleChange}
-                    />
-                    <TextField
-                        className={classes.input}
-                        id="outlined-basic"
-                        name="workspaceName"
-                        variant="outlined"
-                        value={workspaceName}
-                        onChange={handleChange}
-                    />
-                    <TextField
-                        className={classes.input}
-                        id="outlined-basic"
-                        name="workspaceName"
-                        variant="outlined"
-                        value={workspaceName}
-                        onChange={handleChange}
-                    />
-                    {additionalFields.map((number) => (
-                        <TextField
-                            className={classes.input}
-                            id="outlined-basic"
-                            name="workspaceName"
-                            key={number}
-                            variant="outlined"
-                            value={workspaceName}
-                            onChange={handleChange}
+            <form onSubmit={handleSubmit(onSubmit)}>
+                <Box className={classes.formContainer}>
+                    <Box className={classes.inputContainer}>
+                        <Typography
+                            variant="subtitle1"
+                            className={classes.labelText}
+                        >
+                            Invite people to collaborate in RFC:
+                        </Typography>
+                        <Controller
+                            render={({ field }) => (
+                                <TextField
+                                    {...field}
+                                    className={classes.input}
+                                    id="outlined-basic"
+                                    name="email-3"
+                                    variant="outlined"
+                                />
+                            )}
+                            control={control}
+                            name="email-1"
                         />
-                    ))}
+                        <Controller
+                            render={({ field }) => (
+                                <TextField
+                                    {...field}
+                                    className={classes.input}
+                                    id="outlined-basic"
+                                    name="email-3"
+                                    variant="outlined"
+                                />
+                            )}
+                            control={control}
+                            name="email-2"
+                        />
+                        <Controller
+                            render={({ field }) => (
+                                <TextField
+                                    {...field}
+                                    className={classes.input}
+                                    id="outlined-basic"
+                                    name="email-3"
+                                    variant="outlined"
+                                />
+                            )}
+                            control={control}
+                            name="email-3"
+                        />
+                        {additionalFields > 0 && (
+                            <Controller
+                                render={({ field }) => (
+                                    <TextField
+                                        {...field}
+                                        className={classes.input}
+                                        id="outlined-basic"
+                                        name="email-3"
+                                        variant="outlined"
+                                    />
+                                )}
+                                control={control}
+                                name="email-4"
+                            />
+                        )}
+                        {additionalFields > 1 && (
+                            <Controller
+                                render={({ field }) => (
+                                    <TextField
+                                        {...field}
+                                        className={classes.input}
+                                        id="outlined-basic"
+                                        name="email-3"
+                                        variant="outlined"
+                                    />
+                                )}
+                                control={control}
+                                name="email-5"
+                            />
+                        )}
+                        {additionalFields > 2 && (
+                            <Controller
+                                render={({ field }) => (
+                                    <TextField
+                                        {...field}
+                                        className={classes.input}
+                                        id="outlined-basic"
+                                        name="email-3"
+                                        variant="outlined"
+                                    />
+                                )}
+                                control={control}
+                                name="email-6"
+                            />
+                        )}
+                    </Box>
                 </Box>
-            </Box>
-            {addButtonDisplay && (
-                <Button
-                    className={classes.button}
-                    variant="contained"
-                    onClick={() => addMoreFields()}
-                >
-                    Add More +
-                </Button>
-            )}
-            <Button
-                className={classes.button}
-                variant="contained"
-                onClick={() => onSubmit()}
-            >
-                Continue
-            </Button>
+                <Box display="flex" flexDirection="column" alignItems="center">
+                    {addButtonDisplay && (
+                        <Button
+                            className={classes.button}
+                            variant="contained"
+                            onClick={() => addMoreFields()}
+                        >
+                            Add More +
+                        </Button>
+                    )}
+                    <Button
+                        className={classes.button}
+                        variant="contained"
+                        type="submit"
+                    >
+                        Continue
+                    </Button>
+                </Box>
+            </form>
             <Snackbar
-                open={openError}
+                open={invitedUsers}
                 autoHideDuration={5000}
-                onClose={() => setOpenError(false)}
+                onClose={() => setInvitedUsers(false)}
             >
-                <Alert severity="error" variant="filled">
-                    {errorMessage}
+                <Alert severity="success" variant="filled">
+                    Users Invited
                 </Alert>
             </Snackbar>
         </Box>

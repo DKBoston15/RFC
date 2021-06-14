@@ -2,6 +2,7 @@ import React, { useState } from "react"
 import { Box, Typography, TextField, Button, Select } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
 import { addWorkspace } from "../utils/workspaceUtils"
+import { addUserRole } from "../utils/userUtils"
 import Snackbar from "@material-ui/core/Snackbar"
 import Alert from "@material-ui/lab/Alert"
 
@@ -89,7 +90,7 @@ const useStyles = makeStyles({
     }
 })
 
-export default function WorkspaceForm({ setWorkspaceSetupComplete }) {
+export default function WorkspaceForm({ setWorkspaceSetupComplete, user }) {
     const classes = useStyles()
     const [workspaceName, setWorkspaceName] = useState("")
     const [workspaceUrl, setworkspaceUrl] = useState("")
@@ -122,9 +123,13 @@ export default function WorkspaceForm({ setWorkspaceSetupComplete }) {
             workspaceUrl,
             companySize
         )
-        console.log("Form Submitted")
         if (workspaceData.status !== "error") {
             console.log("Workspace Created")
+            let userRole = await addUserRole(role, user.id, workspaceData[0].id)
+            if (userRole.status === "error") {
+                setErrorMessage(userRole.msg)
+                setOpenError(true)
+            }
             setWorkspaceSetupComplete(true)
         } else {
             setErrorMessage(workspaceData.msg)
