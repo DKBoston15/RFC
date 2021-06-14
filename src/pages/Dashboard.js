@@ -6,6 +6,7 @@ import Snackbar from "@material-ui/core/Snackbar"
 import Alert from "@material-ui/lab/Alert"
 import queryString from "query-string"
 import { useLocation } from "react-router-dom"
+import Sidebar from "../components/Sidebar"
 
 const useStyles = makeStyles({
     root: {
@@ -42,7 +43,7 @@ const useStyles = makeStyles({
 
 const Dashboard = () => {
     const classes = useStyles()
-    const { signOut } = useAuth()
+    const { user, signOut } = useAuth()
     const [openRecoveryMsg, setOpenRecoveryMsg] = useState(false)
     const { search } = useLocation()
     const logout = () => {
@@ -57,16 +58,7 @@ const Dashboard = () => {
     return (
         <>
             <Box className={classes.root}>
-                <p>You are logged in!</p>
-                <Button
-                    className={classes.buttonTwo}
-                    variant="contained"
-                    onClick={() => {
-                        logout()
-                    }}
-                >
-                    Log Out
-                </Button>
+                <Sidebar user={user} signOut={signOut} />
             </Box>
             <Snackbar
                 open={openRecoveryMsg}
@@ -82,3 +74,15 @@ const Dashboard = () => {
 }
 
 export default Dashboard
+
+{
+    /* <Button
+className={classes.buttonTwo}
+variant="contained"
+onClick={() => {
+    logout()
+}}
+>
+Log Out
+</Button> */
+}
