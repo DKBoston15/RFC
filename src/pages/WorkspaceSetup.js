@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { Box, Typography } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
 import { useAuth } from "../config/auth"
@@ -26,6 +26,7 @@ export default function WorkspaceSetup() {
     const classes = useStyles()
     const { user } = useAuth()
     const [workspaceSetupComplete, setWorkspaceSetupComplete] = useState(false)
+    useEffect(() => {}, [workspaceSetupComplete])
 
     return (
         <>

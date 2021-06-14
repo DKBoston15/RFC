@@ -123,16 +123,16 @@ export default function WorkspaceForm({ setWorkspaceSetupComplete, user }) {
             workspaceUrl,
             companySize
         )
-        let userRole = await addUserRole(role, user.id)
         if (workspaceData.status !== "error") {
             console.log("Workspace Created")
+            let userRole = await addUserRole(role, user.id, workspaceData[0].id)
+            if (userRole.status === "error") {
+                setErrorMessage(userRole.msg)
+                setOpenError(true)
+            }
             setWorkspaceSetupComplete(true)
         } else {
             setErrorMessage(workspaceData.msg)
-            setOpenError(true)
-        }
-        if (userRole.status === "error") {
-            setErrorMessage(userRole.msg)
             setOpenError(true)
         }
     }
