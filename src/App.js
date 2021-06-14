@@ -43,13 +43,13 @@ export default function App() {
             }
         }
     })
-    const [light, setLight] = useState(false)
+    const [light, setLight] = useState(true)
     return (
         <MuiThemeProvider theme={light ? themeLight : themeDark}>
             <CssBaseline />
-            <Button onClick={() => setLight((prev) => !prev)}>
+            {/* <Button onClick={() => setLight((prev) => !prev)}>
                 Toggle Theme
-            </Button>
+            </Button> */}
 
             <Router>
                 <div>

@@ -19,3 +19,23 @@ export const addWorkspace = async (name, url, company_size) => {
     }
     return data
 }
+
+export const getWorkspaceName = async (user_id) => {
+    const { data, error } = await supabase
+        .from("users")
+        .select(`workspace_id`)
+        .eq("id", user_id)
+    if (error) {
+        return { status: "error", msg: error.message }
+    }
+    const workspace_id = data[0].workspace_id
+    const { data: workspace_data, workspace_error } = await supabase
+        .from("workspaces")
+        .select(`name`)
+        .eq("id", workspace_id)
+    if (workspace_error) {
+        console.log(workspace_error)
+        return { status: "error", msg: workspace_error.message }
+    }
+    return workspace_data[0].name
+}
