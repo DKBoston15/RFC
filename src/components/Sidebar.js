@@ -1,16 +1,13 @@
-import React, { useEffect, useState } from "react"
-import {
-    Drawer,
-    Box,
-    Avatar,
-    Badge,
-    Typography,
-    Menu,
-    MenuItem
-} from "@material-ui/core"
-import { makeStyles, withStyles } from "@material-ui/core/styles"
-import { randomColor } from "../utils/utils"
-import { getWorkspaceName } from "../utils/workspaceUtils"
+import React from "react"
+import { Drawer, Box, Button, Typography } from "@material-ui/core"
+import { makeStyles } from "@material-ui/core/styles"
+import CompanyAvatar from "./CompanyAvatar"
+import UserAvatar from "./UserAvatar"
+import FavoritesList from "./FavoritesList"
+import PostAdd from "@material-ui/icons/PostAdd"
+import Search from "@material-ui/icons/Search"
+import Add from "@material-ui/icons/Add"
+import HelpOutline from "@material-ui/icons/HelpOutline"
 
 const useStyles = makeStyles({
     drawer: {
@@ -28,68 +25,34 @@ const useStyles = makeStyles({
     },
     companyHeader: {
         cursor: "pointer"
+    },
+    newPostButton: {
+        background: "#525561",
+        color: "white",
+        textAlign: "left",
+        display: "flex",
+        justifyContent: "flex-start",
+        paddingLeft: "2em",
+        height: "3em",
+        textTransform: "none"
+    },
+    searchButton: {
+        color: "white",
+        textAlign: "left",
+        display: "flex",
+        justifyContent: "flex-start",
+        paddingLeft: "2em",
+        height: "3em",
+        textTransform: "none"
+    },
+    subHeader: {
+        color: "#9E9E9E",
+        textAlign: "left"
     }
 })
 
-const StyledBadge = withStyles((theme) => ({
-    badge: {
-        backgroundColor: "#44b700",
-        color: "#44b700",
-        boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
-        "&::after": {
-            position: "absolute",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100%",
-            borderRadius: "50%",
-            animation: "$ripple 1.2s infinite ease-in-out",
-            border: "1px solid currentColor",
-            content: '""'
-        }
-    },
-    "@keyframes ripple": {
-        "0%": {
-            transform: "scale(.8)",
-            opacity: 1
-        },
-        "100%": {
-            transform: "scale(2.4)",
-            opacity: 0
-        }
-    }
-}))(Badge)
-
 export default function Sidebar({ user, signOut }) {
     const classes = useStyles()
-    const [workspaceName, setWorkspaceName] = useState("")
-    const [workspaceAbv, setWorkspaceAbv] = useState("")
-    const [anchorEl, setAnchorEl] = useState(null)
-    // const [menuOpen, setMenuOpen] = useState(false)
-    const getName = async () => {
-        let name = await getWorkspaceName(user.id)
-        const matches = name.match(/\b(\w)/g)
-        setWorkspaceAbv(matches.join(""))
-        name = `${name.substring(0, 6)}...`
-        setWorkspaceName(name.replace(/\s/g, ""))
-    }
-
-    useEffect(() => {
-        getName()
-    }, [user])
-
-    const handleClose = () => {
-        setAnchorEl(null)
-    }
-
-    const openMenu = (event) => {
-        setAnchorEl(event.currentTarget)
-    }
-
-    const logout = () => {
-        signOut()
-        handleClose()
-    }
 
     return (
         <Drawer
@@ -100,57 +63,77 @@ export default function Sidebar({ user, signOut }) {
                 paper: classes.drawerPaper
             }}
         >
-            <Box display="flex" flexDirection="column">
-                <Box display="flex" justifyContent="space-between">
-                    <Menu
-                        id="lame-menu"
-                        anchorEl={anchorEl}
-                        keepMounted
-                        open={Boolean(anchorEl)}
-                        onClose={handleClose}
-                    >
-                        <MenuItem onClick={handleClose}>
-                            Workspace Settings
-                        </MenuItem>
-                        <MenuItem onClick={logout}>Log out</MenuItem>
-                    </Menu>
-
+            <Box display="flex" justifyContent="space-between">
+                <CompanyAvatar user={user} signOut={signOut} />
+                <UserAvatar user={user} signOut={signOut} />
+            </Box>
+            <Box
+                display="flex"
+                flexDirection="column"
+                justifyContent="space-between"
+                height="100%"
+            >
+                <Box>
                     <Box
                         display="flex"
+                        justifyContent="space-between"
                         alignItems="center"
-                        onClick={openMenu}
-                        className={classes.companyHeader}
+                        flexDirection="column"
+                        marginTop="2em"
                     >
-                        <Avatar
-                            style={{
-                                backgroundColor: randomColor()
-                            }}
+                        <Button
+                            className={classes.newPostButton}
+                            startIcon={<PostAdd />}
+                            fullWidth
                         >
-                            {workspaceAbv}
-                        </Avatar>
-                        <Typography
-                            variant="subtitle1"
-                            className={classes.companyName}
+                            <Typography variant="body2">New Post</Typography>
+                        </Button>
+                        <Button
+                            startIcon={<Search />}
+                            className={classes.searchButton}
+                            fullWidth
                         >
-                            {workspaceName}
-                        </Typography>
+                            <Typography variant="body2">Search</Typography>
+                        </Button>
                     </Box>
-                    <StyledBadge
-                        overlap="circle"
-                        anchorOrigin={{
-                            vertical: "bottom",
-                            horizontal: "right"
-                        }}
-                        variant="dot"
+                    <Box
+                        display="flex"
+                        justifyContent="space-between"
+                        alignItems="flex-start"
+                        flexDirection="column"
+                        marginTop="2em"
                     >
-                        <Avatar
-                            style={{
-                                backgroundColor: randomColor()
-                            }}
+                        <Box
+                            display="flex"
+                            justifyContent="flex-start"
+                            alignItems="center"
+                            marginTop="2em"
                         >
-                            IG
-                        </Avatar>
-                    </StyledBadge>
+                            <Typography
+                                className={classes.subHeader}
+                                variant="body2"
+                            >
+                                Favorites
+                            </Typography>
+                        </Box>
+                        <FavoritesList user={user} />
+                    </Box>
+                </Box>
+                <Box>
+                    <Button
+                        startIcon={<Add />}
+                        className={classes.searchButton}
+                        fullWidth
+                    >
+                        Invite People
+                    </Button>
+                    <Button
+                        startIcon={<HelpOutline />}
+                        className={classes.searchButton}
+                        fullWidth
+                    >
+                        Help & Feedback
+                    </Button>
                 </Box>
             </Box>
         </Drawer>
