@@ -52,22 +52,6 @@ export default function App() {
 
             <Router>
                 <div>
-                    {/* <nav>
-                        <ul>
-                            <li>
-                                <Link to="/">Home</Link>
-                            </li>
-                            <li>
-                                <Link to="/sign-up">Sign Up</Link>
-                            </li>
-                            <li>
-                                <Link to="/sign-in">Sign In</Link>
-                            </li>
-                            <li>
-                                <Link to="/dashboard">Dashboard</Link>
-                            </li>
-                        </ul>
-                    </nav> */}
                     <RouterSwitch>
                         <ProtectedRoute
                             path="/workspace-setup"
