@@ -78,6 +78,7 @@ export default function Home() {
             if (user) {
                 console.log(user)
                 let userData = await getUserData(user.id)
+                console.log("userdata", userData)
                 if (userData.status !== "error" && userData.length === 0) {
                     if (user.id) {
                         addUser(user.id)
@@ -86,6 +87,9 @@ export default function Home() {
                         setErrorMessage(userData.msg)
                         setOpenError(true)
                     }
+                }
+                if (!userData[0]) {
+                    window.location.reload()
                 }
                 if (userData[0].signup_flow_complete === false) {
                     history.push("/workspace-setup")
