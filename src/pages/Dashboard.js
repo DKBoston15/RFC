@@ -50,15 +50,13 @@ const Dashboard = () => {
     const { user, signOut } = useAuth()
     const [openRecoveryMsg, setOpenRecoveryMsg] = useState(false)
     const { search } = useLocation()
-    const logout = () => {
-        signOut()
-    }
     useEffect(() => {
         const values = queryString.parse(search)
         if (values.reset) {
             setOpenRecoveryMsg(true)
         }
     }, [search])
+
     return (
         <>
             <Box className={classes.root}>

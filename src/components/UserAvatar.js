@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react"
 import { Box, Avatar, Badge, Menu, MenuItem } from "@material-ui/core"
 import { withStyles } from "@material-ui/core/styles"
 import { randomColor } from "../utils/utils"
-import { getWorkspaceName } from "../utils/workspaceUtils"
 
 const StyledBadge = withStyles((theme) => ({
     badge: {

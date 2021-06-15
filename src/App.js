@@ -18,7 +18,6 @@ import WorkspaceSetup from "./pages/WorkspaceSetup"
 
 import CssBaseline from "@material-ui/core/CssBaseline"
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles"
-import Button from "@material-ui/core/Button"
 
 //On password reset page, redirect back to sign in if not auth is present
 //Add password reset form
