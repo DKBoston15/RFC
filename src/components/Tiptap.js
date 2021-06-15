@@ -186,7 +186,7 @@ export default () => {
     })
 
     return (
-        <div>
+        <div className="tiptapContainer">
             <MenuBar editor={editor} />
             <EditorContent editor={editor} />
         </div>

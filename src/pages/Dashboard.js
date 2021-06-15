@@ -15,8 +15,11 @@ const useStyles = makeStyles({
         flexDirection: "column",
         justifyContent: "space-evenly",
         alignItems: "center",
-        height: "50vh",
-        marginTop: "8%"
+        minWidth: "100vw",
+        width: "100%",
+        minHeight: "100vh",
+        height: "100%",
+        background: "white"
     },
     buttonOne: {
         color: "white",
@@ -60,16 +63,15 @@ const Dashboard = () => {
     return (
         <>
             <Box className={classes.root}>
-                <Sidebar user={user} signOut={signOut} />
-                {/* <Grid container spacing={12}>
-                    <Grid item xs={2} />
+                <Grid container spacing={12}>
+                    <Grid item xs={2}>
+                        <Sidebar user={user} signOut={signOut} />
+                    </Grid>
                     <Grid item xs={8}>
                         <Tiptap />
                     </Grid>
-                    <Grid item xs={2}>
-                        <h1>Sidebar Placeholder</h1>
-                    </Grid>
-                </Grid> */}
+                    <Grid item xs={2}></Grid>
+                </Grid>
             </Box>
 
             <Snackbar
