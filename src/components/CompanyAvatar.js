@@ -1,12 +1,5 @@
 import React, { useEffect, useState } from "react"
-import {
-    Box,
-    Avatar,
-    Badge,
-    Typography,
-    Menu,
-    MenuItem
-} from "@material-ui/core"
+import { Box, Avatar, Typography, Menu, MenuItem } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
 import { randomColor } from "../utils/utils"
 import { getWorkspaceName } from "../utils/workspaceUtils"

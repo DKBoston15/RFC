@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react"
 import { useAuth } from "../config/auth"
-import { Button, Box } from "@material-ui/core"
+import { Box } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
 import Snackbar from "@material-ui/core/Snackbar"
 import Alert from "@material-ui/lab/Alert"
@@ -46,15 +46,13 @@ const Dashboard = () => {
     const { user, signOut } = useAuth()
     const [openRecoveryMsg, setOpenRecoveryMsg] = useState(false)
     const { search } = useLocation()
-    const logout = () => {
-        signOut()
-    }
     useEffect(() => {
         const values = queryString.parse(search)
         if (values.reset) {
             setOpenRecoveryMsg(true)
         }
     }, [search])
+
     return (
         <>
             <Box className={classes.root}>
@@ -74,15 +72,3 @@ const Dashboard = () => {
 }
 
 export default Dashboard
-
-{
-    /* <Button
-className={classes.buttonTwo}
-variant="contained"
-onClick={() => {
-    logout()
-}}
->
-Log Out
-</Button> */
-}
