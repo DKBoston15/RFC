@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react"
 import { useAuth } from "../config/auth"
-import { Button, Box } from "@material-ui/core"
+import { Box, Grid } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
 import Snackbar from "@material-ui/core/Snackbar"
 import Alert from "@material-ui/lab/Alert"
 import queryString from "query-string"
 import { useLocation } from "react-router-dom"
 import Sidebar from "../components/Sidebar"
+import Tiptap from "../components/Tiptap"
 
 const useStyles = makeStyles({
     root: {
@@ -38,6 +39,9 @@ const useStyles = makeStyles({
         "&:hover": {
             backgroundColor: "rgba(138, 151, 177, 0.5)"
         }
+    },
+    tiptapContainer: {
+        marginLeft: "20em"
     }
 })
 
@@ -59,7 +63,17 @@ const Dashboard = () => {
         <>
             <Box className={classes.root}>
                 <Sidebar user={user} signOut={signOut} />
+                {/* <Grid container spacing={12}>
+                    <Grid item xs={2} />
+                    <Grid item xs={8}>
+                        <Tiptap />
+                    </Grid>
+                    <Grid item xs={2}>
+                        <h1>Sidebar Placeholder</h1>
+                    </Grid>
+                </Grid> */}
             </Box>
+
             <Snackbar
                 open={openRecoveryMsg}
                 autoHideDuration={5000}
@@ -74,15 +88,3 @@ const Dashboard = () => {
 }
 
 export default Dashboard
-
-{
-    /* <Button
-className={classes.buttonTwo}
-variant="contained"
-onClick={() => {
-    logout()
-}}
->
-Log Out
-</Button> */
-}
