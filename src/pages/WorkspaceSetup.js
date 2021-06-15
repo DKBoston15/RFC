@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react"
 import { Box, Typography } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
 import { useAuth } from "../config/auth"
+import { Helmet } from "react-helmet"
 
 import WorkspaceForm from "../components/WorkspaceForm"
 import InviteTeamMates from "../components/InviteTeamates"
@@ -30,6 +31,9 @@ export default function WorkspaceSetup() {
 
     return (
         <>
+            <Helmet>
+                <title>RFC | Workspace Setup</title>
+            </Helmet>
             <Box display="flex" flex={12} className={classes.container}>
                 <Box flex={1} className={classes.textLeft}>
                     <Typography

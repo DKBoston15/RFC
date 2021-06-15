@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react"
 import { Box, TextField, Typography, Button } from "@material-ui/core"
 import { supabase } from "../config/supabase"
 import { useHistory } from "react-router-dom"
+import { Helmet } from "react-helmet"
 
 import { makeStyles } from "@material-ui/core/styles"
 
@@ -106,6 +107,9 @@ export default function PasswordReset() {
 
     return (
         <Box className={classes.root}>
+            <Helmet>
+                <title>RFC | Password Reset</title>
+            </Helmet>
             <Typography variant="h4" className={classes.header}>
                 Reset Password
             </Typography>

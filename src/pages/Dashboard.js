@@ -8,6 +8,7 @@ import queryString from "query-string"
 import { useLocation } from "react-router-dom"
 import Sidebar from "../components/Sidebar"
 import Tiptap from "../components/Tiptap"
+import { Helmet } from "react-helmet"
 
 const useStyles = makeStyles({
     root: {
@@ -63,6 +64,9 @@ const Dashboard = () => {
 
     return (
         <>
+            <Helmet>
+                <title>RFC | Dashboard</title>
+            </Helmet>
             <Box className={classes.root}>
                 <Grid container spacing={12}>
                     <Grid item xs={2}>

@@ -7,6 +7,7 @@ import { useAuth } from "../config/auth"
 import { addUser, getUserData } from "../utils/userUtils"
 import Snackbar from "@material-ui/core/Snackbar"
 import Alert from "@material-ui/lab/Alert"
+import { Helmet } from "react-helmet"
 
 const useStyles = makeStyles({
     root: {
@@ -100,6 +101,9 @@ export default function Home() {
     }, [user, history])
     return (
         <Box className={classes.root}>
+            <Helmet>
+                <title>RFC | Home</title>
+            </Helmet>
             <img src={Logo} alt="logo" className={classes.logo} />
             <Typography variant="h4">Welcome to RFC</Typography>
             {user == null && (

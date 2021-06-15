@@ -2,6 +2,7 @@ import React, { useState } from "react"
 import { useAuth } from "../config/auth"
 import { Link } from "react-router-dom"
 import { makeStyles } from "@material-ui/core/styles"
+import { Helmet } from "react-helmet"
 
 import { Box, Button, TextField, Typography, SvgIcon } from "@material-ui/core"
 
@@ -138,6 +139,9 @@ const SignIn = () => {
 
     return (
         <Box className={classes.root}>
+            <Helmet>
+                <title>RFC | Sign In</title>
+            </Helmet>
             <img src={Logo} alt="logo" className={classes.logo} />
             <Typography variant="h4">{headerText}</Typography>
             {!passwordResetDisplay && (
