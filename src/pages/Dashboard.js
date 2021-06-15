@@ -19,7 +19,8 @@ const useStyles = makeStyles({
         width: "100%",
         minHeight: "100vh",
         height: "100%",
-        background: "white"
+        background: "white",
+        color: "black"
     },
     buttonOne: {
         color: "white",

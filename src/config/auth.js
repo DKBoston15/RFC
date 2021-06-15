@@ -1,6 +1,7 @@
 import React, { useContext, useState, useEffect, createContext } from "react"
 import { supabase } from "./supabase"
-const prod = true
+// const url = "http://localhost:3000/"
+const url = "https://pensive-banach-d9d548.netlify.app/"
 
 // create a context for authentication
 const AuthContext = createContext()
@@ -41,18 +42,14 @@ export const AuthProvider = ({ children }) => {
                     provider: "google"
                 },
                 {
-                    redirectTo: prod
-                        ? "https://pensive-banach-d9d548.netlify.app"
-                        : "http://localhost:3000/"
+                    redirectTo: url
                 }
             ),
         signIn: (data) => supabase.auth.signIn(data),
         signOut: () => supabase.auth.signOut(),
         resetPassword: (data) =>
             supabase.auth.api.resetPasswordForEmail(data, {
-                redirectTo: prod
-                    ? "https://pensive-banach-d9d548.netlify.app/reset-password"
-                    : "http://localhost:3000/reset-password"
+                redirectTo: `${url}reset-password`
             }),
         inviteUser: (data) =>
             supabase.auth.api.inviteUserByEmail(

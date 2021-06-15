@@ -42,7 +42,7 @@ export default function App() {
             }
         }
     })
-    const [light, setLight] = useState(true)
+    const [light, setLight] = useState(false)
     return (
         <MuiThemeProvider theme={light ? themeLight : themeDark}>
             <CssBaseline />
