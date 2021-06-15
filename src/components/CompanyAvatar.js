@@ -10,6 +10,9 @@ const useStyles = makeStyles({
     },
     companyHeader: {
         cursor: "pointer"
+    },
+    menuItem: {
+        color: "black"
     }
 })
 
@@ -53,10 +56,15 @@ export default function CompanyAvatar({ user, signOut }) {
                 open={Boolean(anchorEl)}
                 onClose={handleMenuClose}
             >
-                <MenuItem onClick={handleMenuClose}>
+                <MenuItem
+                    className={classes.menuItem}
+                    onClick={handleMenuClose}
+                >
                     Workspace Settings
                 </MenuItem>
-                <MenuItem onClick={logout}>Log out</MenuItem>
+                <MenuItem className={classes.menuItem} onClick={logout}>
+                    Log out
+                </MenuItem>
             </Menu>
 
             <Box
@@ -67,7 +75,8 @@ export default function CompanyAvatar({ user, signOut }) {
             >
                 <Avatar
                     style={{
-                        backgroundColor: randomColorBG
+                        backgroundColor: randomColorBG,
+                        color: "white"
                     }}
                 >
                     {workspaceAbv}

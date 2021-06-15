@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { Box, Avatar, Badge, Menu, MenuItem } from "@material-ui/core"
-import { withStyles } from "@material-ui/core/styles"
+import { withStyles, makeStyles } from "@material-ui/core/styles"
 import { randomColor } from "../utils/utils"
 
 const StyledBadge = withStyles((theme) => ({
@@ -32,10 +32,17 @@ const StyledBadge = withStyles((theme) => ({
     }
 }))(Badge)
 
+const useStyles = makeStyles({
+    menuItem: {
+        color: "black"
+    }
+})
+
 export default function UserAvatar({ user, signOut }) {
     const [anchorEl, setAnchorEl] = useState(null)
     const [userName, setUserName] = useState("")
     const [userImage, setUserImage] = useState("")
+    const classes = useStyles()
 
     useEffect(() => {
         const getName = async (name) => {
@@ -73,10 +80,27 @@ export default function UserAvatar({ user, signOut }) {
                 open={Boolean(anchorEl)}
                 onClose={handleMenuClose}
             >
-                <MenuItem onClick={handleMenuClose}>View Profile</MenuItem>
-                <MenuItem onClick={handleMenuClose}>Settings</MenuItem>
-                <MenuItem onClick={handleMenuClose}>Help</MenuItem>
-                <MenuItem onClick={logout}>Log out</MenuItem>
+                <MenuItem
+                    className={classes.menuItem}
+                    onClick={handleMenuClose}
+                >
+                    View Profile
+                </MenuItem>
+                <MenuItem
+                    className={classes.menuItem}
+                    onClick={handleMenuClose}
+                >
+                    Settings
+                </MenuItem>
+                <MenuItem
+                    className={classes.menuItem}
+                    onClick={handleMenuClose}
+                >
+                    Help
+                </MenuItem>
+                <MenuItem className={classes.menuItem} onClick={logout}>
+                    Log out
+                </MenuItem>
             </Menu>
             <Box onClick={openMenu}>
                 <StyledBadge

@@ -3,7 +3,6 @@ import { Box, Button, Typography } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
 import Star from "@material-ui/icons/Star"
 import { getFavoriteRfcs } from "../utils/rfcUtils"
-import { getWorkspaceID } from "../utils/workspaceUtils"
 
 const useStyles = makeStyles({
     searchButton: {
