@@ -17,6 +17,7 @@ export default function CompanyAvatar({ user, signOut }) {
     const [workspaceName, setWorkspaceName] = useState("")
     const [workspaceAbv, setWorkspaceAbv] = useState("")
     const [anchorEl, setAnchorEl] = useState(null)
+    const [randomColorBG, setRandomColorBG] = useState("")
     const classes = useStyles()
     const getName = async () => {
         let name = await getWorkspaceName(user.id)
@@ -28,6 +29,7 @@ export default function CompanyAvatar({ user, signOut }) {
 
     useEffect(() => {
         getName()
+        setRandomColorBG(randomColor())
     }, [user])
 
     const handleMenuClose = () => {
@@ -65,7 +67,7 @@ export default function CompanyAvatar({ user, signOut }) {
             >
                 <Avatar
                     style={{
-                        backgroundColor: randomColor()
+                        backgroundColor: randomColorBG
                     }}
                 >
                     {workspaceAbv}

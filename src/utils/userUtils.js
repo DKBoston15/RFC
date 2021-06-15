@@ -19,12 +19,7 @@ export const addUser = async (id) => {
     return data
 }
 
-export const addUserRole = async (
-    role,
-    id,
-    workspace_id,
-    signup_flow_complete
-) => {
+export const addUserRole = async (role, id, workspace_id) => {
     const { data, error } = await supabase
         .from("users")
         .update({

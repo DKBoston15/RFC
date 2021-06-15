@@ -39,3 +39,14 @@ export const getWorkspaceName = async (user_id) => {
     }
     return workspace_data[0].name
 }
+
+export const getWorkspaceID = async (user_id) => {
+    const { data, error } = await supabase
+        .from("users")
+        .select(`workspace_id`)
+        .eq("id", user_id)
+    if (error) {
+        return { status: "error", msg: error.message }
+    }
+    return data[0].workspace_id
+}
