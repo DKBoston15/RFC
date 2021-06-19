@@ -49,8 +49,6 @@ export default function UserAvatar({ user, signOut }) {
             const matches = name.match(/\b(\w)/g)
             setUserName(matches.join(""))
         }
-
-        console.log(user)
         if (user.user_metadata.avatar_url) {
             setUserImage(user.user_metadata.avatar_url)
         }
