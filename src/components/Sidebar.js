@@ -3,7 +3,9 @@ import { Drawer, Box, Button, Typography } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
 import CompanyAvatar from "./CompanyAvatar"
 import UserAvatar from "./UserAvatar"
+import AddFolder from "./AddFolder"
 import FavoritesList from "./FavoritesList"
+import DocumentList from "./DocumentList"
 import PostAdd from "@material-ui/icons/PostAdd"
 import Search from "@material-ui/icons/Search"
 import Add from "@material-ui/icons/Add"
@@ -117,6 +119,30 @@ export default function Sidebar({ user, signOut }) {
                             </Typography>
                         </Box>
                         <FavoritesList user={user} />
+                    </Box>
+                    <Box
+                        display="flex"
+                        justifyContent="space-between"
+                        alignItems="flex-start"
+                        flexDirection="column"
+                        marginTop="-1em"
+                    >
+                        <Box
+                            display="flex"
+                            justifyContent="space-between"
+                            alignItems="center"
+                            marginTop="2em"
+                            width="100%"
+                        >
+                            <Typography
+                                className={classes.subHeader}
+                                variant="body2"
+                            >
+                                Documents
+                            </Typography>
+                            <AddFolder />
+                        </Box>
+                        <DocumentList user={user} />
                     </Box>
                 </Box>
                 <Box>

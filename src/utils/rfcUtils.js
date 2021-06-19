@@ -41,3 +41,25 @@ export const getFavoriteRfcs = async (user_id) => {
     }
     return favoriteRfcs
 }
+
+export const getDocuments = async (user_id) => {
+    //Get Folders & RFCS
+    const { data, error } = await supabase
+        .from("folders")
+        .select(`name, rfcs`)
+        .eq("user_id", user_id)
+    if (error) {
+        return { status: "error", msg: error.message }
+    }
+    const folderArray = []
+    for (let i = 0; i < data.length; i++) {
+        let rfcDataArray = []
+        for (let x = 0; x < data[i].rfcs.length; x++) {
+            let rfcData = await getRfc(data[i].rfcs[x])
+            rfcDataArray.push({ name: rfcData[0].name, id: data[i].rfcs[x] })
+        }
+        folderArray.push({ name: data[i].name, rfcs: rfcDataArray })
+        rfcDataArray = []
+    }
+    return folderArray
+}
