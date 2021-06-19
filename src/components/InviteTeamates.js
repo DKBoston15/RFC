@@ -56,6 +56,29 @@ const useStyles = makeStyles({
             border: "none"
         }
     },
+    sendInviteButton: {
+        color: "white",
+        minHeight: "30px",
+        background: "#2C9DDB",
+        fontWeight: 600,
+        width: "10em",
+        "&:hover": {
+            backgroundColor: "rgba(44, 157, 219, 0.5)",
+            border: "none"
+        }
+    },
+    continueButton: {
+        color: "white",
+        minHeight: "48px",
+        background: "#7B61FF",
+        fontWeight: 600,
+        width: "30vw",
+        marginTop: "2em",
+        "&:hover": {
+            backgroundColor: "rgba(123, 97, 255, 0.5)",
+            border: "none"
+        }
+    },
     description: {
         width: "35%",
         textAlign: "center",
@@ -70,7 +93,7 @@ const useStyles = makeStyles({
         width: "35vw",
         padding: ".5em 0",
         borderRadius: "5px",
-        minHeight: "55vh"
+        minHeight: "40vh"
     },
     link: {
         textDecoration: "none",
@@ -91,6 +114,15 @@ const useStyles = makeStyles({
     },
     header: {
         marginBottom: "1em"
+    },
+    buttonContainer: {
+        alignItems: "center",
+        justifyContent: "space-between",
+        marginTop: "2em",
+        marginBottom: "1em"
+    },
+    addMoreText: {
+        cursor: "pointer"
     }
 })
 
@@ -113,13 +145,11 @@ export default function InviteTeamates() {
     const onSubmit = async (values) => {
         for (const email in values) {
             await inviteUser(encodeURIComponent(values[email]))
-            //Get User
-            //Add Workspace ID to User
         }
         setInvitedUsers(true)
-        setTimeout(() => {
-            history.push("/dashboard")
-        }, 1500)
+    }
+    const nextPage = () => {
+        history.push("/dashboard")
     }
     return (
         <Box className={classes.root}>
@@ -224,21 +254,34 @@ export default function InviteTeamates() {
                             />
                         )}
                     </Box>
+                    <Box
+                        display="flex"
+                        width="90%"
+                        className={classes.buttonContainer}
+                    >
+                        {addButtonDisplay && (
+                            <Typography
+                                className={classes.addMoreText}
+                                onClick={() => addMoreFields()}
+                            >
+                                Add More +
+                            </Typography>
+                        )}
+                        {!addButtonDisplay && <Typography />}
+                        <Button
+                            className={classes.sendInviteButton}
+                            variant="contained"
+                            type="submit"
+                        >
+                            Send Invites
+                        </Button>
+                    </Box>
                 </Box>
                 <Box display="flex" flexDirection="column" alignItems="center">
-                    {addButtonDisplay && (
-                        <Button
-                            className={classes.button}
-                            variant="contained"
-                            onClick={() => addMoreFields()}
-                        >
-                            Add More +
-                        </Button>
-                    )}
                     <Button
-                        className={classes.button}
+                        className={classes.continueButton}
                         variant="contained"
-                        type="submit"
+                        onClick={nextPage}
                     >
                         Continue
                     </Button>

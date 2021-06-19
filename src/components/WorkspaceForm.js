@@ -3,8 +3,10 @@ import { Box, Typography, TextField, Button, Select } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
 import { addWorkspace } from "../utils/workspaceUtils"
 import { addUserRole } from "../utils/userUtils"
+import InputAdornment from "@material-ui/core/InputAdornment"
 import Snackbar from "@material-ui/core/Snackbar"
 import Alert from "@material-ui/lab/Alert"
+import "./input_adornment_styles/styles.scss"
 
 const useStyles = makeStyles({
     root: {
@@ -44,12 +46,12 @@ const useStyles = makeStyles({
     button: {
         color: "white",
         minHeight: "48px",
-        backgroundColor: "rgba(44, 157, 219)",
+        backgroundColor: "#7B61FF",
         fontWeight: 600,
         width: "30vw",
         marginTop: "2em",
         "&:hover": {
-            backgroundColor: "rgba(44, 157, 219, 0.5)"
+            backgroundColor: "rgba(123, 97, 255, 0.5)"
         }
     },
     description: {
@@ -87,6 +89,9 @@ const useStyles = makeStyles({
     },
     header: {
         marginBottom: "1em"
+    },
+    rfcLabel: {
+        color: "white !important"
     }
 })
 
@@ -98,7 +103,6 @@ export default function WorkspaceForm({ setWorkspaceSetupComplete, user }) {
     const [role, setRole] = useState("")
     const [errorMessage, setErrorMessage] = useState("")
     const [openError, setOpenError] = useState(false)
-
     const handleChange = (e) => {
         switch (e.target.name) {
             case "workspaceName":
@@ -177,7 +181,13 @@ export default function WorkspaceForm({ setWorkspaceSetupComplete, user }) {
                         id="outlined-basic"
                         name="workspaceUrl"
                         variant="outlined"
-                        placeholder="rfc.app/"
+                        InputProps={{
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    rfc.app/
+                                </InputAdornment>
+                            )
+                        }}
                         onChange={handleChange}
                     />
                 </Box>
