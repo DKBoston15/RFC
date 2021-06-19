@@ -29,7 +29,7 @@ const useStyles = makeStyles({
         cursor: "pointer"
     },
     newPostButton: {
-        background: "#525561",
+        background: "#7B61FF",
         color: "white",
         textAlign: "left",
         display: "flex",
