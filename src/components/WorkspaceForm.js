@@ -44,12 +44,12 @@ const useStyles = makeStyles({
     button: {
         color: "white",
         minHeight: "48px",
-        backgroundColor: "rgba(44, 157, 219)",
+        backgroundColor: "#7B61FF",
         fontWeight: 600,
         width: "30vw",
         marginTop: "2em",
         "&:hover": {
-            backgroundColor: "rgba(44, 157, 219, 0.5)"
+            backgroundColor: "rgba(123, 97, 255, 0.5)"
         }
     },
     description: {
