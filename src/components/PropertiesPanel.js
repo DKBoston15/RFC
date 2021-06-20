@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { Box, Divider, Typography } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
 import LinkIcon from "@material-ui/icons/Link"
@@ -48,6 +48,9 @@ const useStyles = makeStyles({
 
 export default function PropertiesPanel({ rfcInfo }) {
     const classes = useStyles()
+    useEffect(() => {
+        console.log(rfcInfo)
+    }, [rfcInfo])
     return (
         <>
             {rfcInfo && (

@@ -40,6 +40,10 @@ export default function Priority({ rfcInfo }) {
     const [anchorEl, setAnchorEl] = useState(null)
     const [currentSelection, setCurrentSelection] = useState(rfcInfo.priority)
 
+    useEffect(() => {
+        setCurrentSelection(rfcInfo.priority)
+    }, [rfcInfo])
+
     let priority
     const currentStatus = () => {
         switch (currentSelection) {

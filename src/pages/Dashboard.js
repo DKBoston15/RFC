@@ -11,8 +11,8 @@ import Tiptap from "../components/Tiptap"
 import TipTapContainer from "../components/TipTapContainer"
 import PropertiesPanel from "../components/PropertiesPanel"
 import { Helmet } from "react-helmet"
-import { getRfc } from "../utils/rfcUtils"
 import "./dashboard_styles.scss"
+import { getRfc } from "../utils/rfcUtils"
 
 const useStyles = makeStyles({
     // buttonOne: {
@@ -42,7 +42,7 @@ const useStyles = makeStyles({
     // }
 })
 
-const Dashboard = (props) => {
+const Dashboard = ({ match }) => {
     const classes = useStyles()
     const { user, signOut } = useAuth()
     const [openRecoveryMsg, setOpenRecoveryMsg] = useState(false)
@@ -54,11 +54,12 @@ const Dashboard = (props) => {
             setOpenRecoveryMsg(true)
         }
         const getRFCData = async () => {
-            const data = await getRfc(props.match.params.id)
+            console.log(match.params.id)
+            const data = await getRfc(match.params.id)
             setRfcInfo(data[0])
         }
         getRFCData()
-    }, [props, search])
+    }, [search, match])
 
     return (
         <div class="container">

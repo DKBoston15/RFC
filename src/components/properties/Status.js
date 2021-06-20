@@ -59,7 +59,12 @@ const useStyles = makeStyles({
 export default function Status({ rfcInfo }) {
     const classes = useStyles()
     const [anchorEl, setAnchorEl] = useState(null)
-    const [currentSelection, setCurrentSelection] = useState(rfcInfo.status)
+    console.log(rfcInfo.status)
+    const [currentSelection, setCurrentSelection] = useState("")
+
+    useEffect(() => {
+        setCurrentSelection(rfcInfo.status)
+    }, [rfcInfo])
 
     let status
     const currentStatus = () => {
