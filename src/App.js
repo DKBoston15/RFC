@@ -62,7 +62,8 @@ export default function App() {
                             <PasswordReset />
                         </Route>
                         <ProtectedRoute
-                            path="/dashboard"
+                            exact
+                            path="/dashboard/:id"
                             component={Dashboard}
                             isAuth={user}
                         />

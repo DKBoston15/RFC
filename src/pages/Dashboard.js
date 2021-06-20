@@ -5,10 +5,11 @@ import { makeStyles } from "@material-ui/core/styles"
 import Snackbar from "@material-ui/core/Snackbar"
 import Alert from "@material-ui/lab/Alert"
 import queryString from "query-string"
-import { useLocation } from "react-router-dom"
+import { useLocation, withRouter } from "react-router-dom"
 import Sidebar from "../components/Sidebar"
 import Tiptap from "../components/Tiptap"
 import { Helmet } from "react-helmet"
+import { getRfc } from "../utils/rfcUtils"
 
 const useStyles = makeStyles({
     root: {
@@ -50,17 +51,23 @@ const useStyles = makeStyles({
     }
 })
 
-const Dashboard = () => {
+const Dashboard = (props) => {
     const classes = useStyles()
     const { user, signOut } = useAuth()
     const [openRecoveryMsg, setOpenRecoveryMsg] = useState(false)
+    const [rfcInfo, setRfcInfo] = useState()
     const { search } = useLocation()
     useEffect(() => {
         const values = queryString.parse(search)
         if (values.reset) {
             setOpenRecoveryMsg(true)
         }
-    }, [search])
+        const getRFCData = async () => {
+            const data = await getRfc(props.match.params.id)
+            setRfcInfo(data[0])
+        }
+        getRFCData()
+    }, [props, search])
 
     return (
         <>
@@ -68,12 +75,17 @@ const Dashboard = () => {
                 <title>RFC | Dashboard</title>
             </Helmet>
             <Box className={classes.root}>
-                <Grid container spacing={12}>
+                <Grid container spacing={10}>
                     <Grid item xs={2}>
                         <Sidebar user={user} signOut={signOut} />
                     </Grid>
-                    <Grid item xs={8}>
-                        <Tiptap />
+                    <Grid item xs={6}>
+                        {rfcInfo && (
+                            <>
+                                <h1>{rfcInfo.name}</h1>
+                                <Tiptap rfcID={rfcInfo.id} />
+                            </>
+                        )}
                     </Grid>
                     <Grid item xs={2}></Grid>
                 </Grid>
@@ -92,4 +104,4 @@ const Dashboard = () => {
     )
 }
 
-export default Dashboard
+export default withRouter(Dashboard)
