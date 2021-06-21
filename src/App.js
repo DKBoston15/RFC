@@ -38,7 +38,7 @@ export default function App() {
                 default: "#202124"
             },
             text: {
-                primary: "#ffffff"
+                // primary: "#ffffff"
             }
         }
     })

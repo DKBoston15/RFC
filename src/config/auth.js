@@ -51,10 +51,6 @@ export const AuthProvider = ({ children }) => {
             supabase.auth.api.resetPasswordForEmail(data, {
                 redirectTo: `${url}reset-password`
             }),
-        inviteUser: (data) =>
-            supabase.auth.api.inviteUserByEmail(
-                "dakotabrownag+test10@gmail.com"
-            ),
         user
     }
 

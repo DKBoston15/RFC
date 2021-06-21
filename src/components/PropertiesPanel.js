@@ -2,9 +2,12 @@ import React, { useEffect } from "react"
 import { Box, Divider, Typography } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
 import LinkIcon from "@material-ui/icons/Link"
+import { useAuth } from "../config/auth"
 
 import Status from "./properties/Status"
 import Priority from "./properties/Priority"
+import Author from "./properties/Author"
+import Tags from "./properties/Tags"
 
 const useStyles = makeStyles({
     panel: {
@@ -31,7 +34,7 @@ const useStyles = makeStyles({
         flexDirection: "column",
         alignItems: "flex-start",
         justifyContent: "space-evenly",
-        height: "15em"
+        height: "20em"
     },
     propertiesPanel2: {
         display: "flex",
@@ -48,6 +51,7 @@ const useStyles = makeStyles({
 
 export default function PropertiesPanel({ rfcInfo }) {
     const classes = useStyles()
+    const { user } = useAuth()
     useEffect(() => {
         console.log(rfcInfo)
     }, [rfcInfo])
@@ -85,7 +89,7 @@ export default function PropertiesPanel({ rfcInfo }) {
                                 variant="caption"
                                 className={classes.propertyHeader}
                             >
-                                Author
+                                <Author rfcInfo={rfcInfo} />
                             </Typography>
                         </Box>
                         <Box>
@@ -93,7 +97,7 @@ export default function PropertiesPanel({ rfcInfo }) {
                                 variant="caption"
                                 className={classes.propertyHeader}
                             >
-                                Tags
+                                <Tags rfcInfo={rfcInfo} />
                             </Typography>
                         </Box>
                         <Box>

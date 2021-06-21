@@ -14,7 +14,7 @@ export const getRfcs = async (workspace_id) => {
 export const getRfc = async (rfc_id) => {
     const { data, error } = await supabase
         .from("rfcs")
-        .select(`name, id, status, priority`)
+        .select(`name, id, status, priority, author`)
         .eq("id", rfc_id)
     if (error) {
         return { status: "error", msg: error.message }
