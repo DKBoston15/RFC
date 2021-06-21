@@ -1,9 +1,18 @@
 import React, { useState } from "react"
 import { makeStyles } from "@material-ui/core/styles"
 import Chip from "@material-ui/core/Chip"
-import { Box, Typography } from "@material-ui/core"
+import {
+    Box,
+    Typography,
+    Menu,
+    Divider,
+    FormControlLabel,
+    Checkbox
+} from "@material-ui/core"
+import Autocomplete, {
+    createFilterOptions
+} from "@material-ui/lab/Autocomplete"
 import TextField from "@material-ui/core/TextField"
-import Autocomplete from "@material-ui/lab/Autocomplete"
 
 const useStyles = makeStyles(() => ({
     statusContainer: {
@@ -38,18 +47,20 @@ const useStyles = makeStyles(() => ({
     autocomplete: {
         marginTop: ".5em"
     },
-    root: {
-        "& .MuiInputBase-root": {
-            color: "black",
-            height: "18px",
-            fontSize: "12px",
-            width: "10em"
-        },
-        "& .MuiAutocomplete-inputFocused": {
-            marginTop: "-.7em"
-        }
+    tagAddContainer: {
+        display: "flex",
+        flexDirection: "column"
     }
 }))
+const filter = createFilterOptions()
+
+// * TODO Tag Operations
+// TODO Get Current RFC Tags
+// TODO Populate Tags on Property Panel
+// TODO Get list of available workspace tags, not already on RFC
+// TODO On new tag, supply autocomplete with unused tags
+// TODO On available tag addition, update RFC tags, update unused tags array
+// TODO On new tag creation, update RFC tags, update unused tags array, update available workspace tags
 
 export default function Tags() {
     const classes = useStyles()
@@ -63,8 +74,11 @@ export default function Tags() {
         { key: 5, label: "Level 6" },
         { key: 6, label: "Level 7" },
         { key: 7, label: "Level 8" },
-        { key: 8, label: "Level 9" },
-        { key: 9, label: "Level 10" }
+        { key: 8, label: "Level 9" }
+    ])
+    const [unusedChips, setUnusedChips] = useState([
+        { key: 11, label: "Test" },
+        { key: 12, label: "Test 2" }
     ])
     const [addTag, setAddTag] = useState(false)
 
@@ -74,26 +88,15 @@ export default function Tags() {
         )
     }
 
-    const addNewTag = () => {
+    const addNewTag = (event) => {
+        setAnchorEl(event.currentTarget)
         setAddTag(true)
     }
 
-    const onTagChange = (event, newValue) => {
-        console.log(newValue.label)
-        let newChip = {
-            key: chipData[chipData.length - 1].key + 1,
-            label: newValue.label
-        }
-        console.log(newChip)
-        // let newChips = chips.push(newValue.label)
-        // console.log(newChips)
-        // setChipData(newChips)
-        setAddTag(false)
-    }
-    const onClose = (event, newValue) => {
-        setTimeout(() => {
-            console.log("Close Detected")
-        }, 500)
+    const [anchorEl, setAnchorEl] = React.useState(null)
+
+    const handleClose = () => {
+        setAnchorEl(null)
     }
 
     return (
@@ -115,36 +118,83 @@ export default function Tags() {
                             />
                         )
                     })}
-                </Box>
-                {!addTag && (
                     <Typography
                         onClick={addNewTag}
                         className={classes.addTag}
                         variant="caption"
+                        aria-controls="simple-menu"
+                        aria-haspopup="true"
                     >
                         + Add Tag
                     </Typography>
-                )}
-                {addTag && (
-                    <Autocomplete
-                        options={chipData}
-                        size="small"
-                        freeSolo
-                        className={classes.autocomplete}
-                        getOptionLabel={(option) => option.label}
-                        value={value}
-                        onChange={onTagChange}
-                        onClose={onClose}
-                        renderInput={(params) => (
-                            <TextField
-                                {...params}
-                                size="small"
-                                variant="outlined"
-                                className={classes.root}
+                    <Menu
+                        id="simple-menu"
+                        anchorEl={anchorEl}
+                        keepMounted
+                        open={Boolean(anchorEl)}
+                        onClose={handleClose}
+                    >
+                        <Box className={classes.tagAddContainer}>
+                            <Autocomplete
+                                value={value}
+                                onChange={(event, newValue) => {
+                                    if (typeof newValue === "string") {
+                                        setValue({
+                                            label: newValue
+                                        })
+                                    } else if (
+                                        newValue &&
+                                        newValue.inputValue
+                                    ) {
+                                        // Create a new value from the user input
+                                        setValue({
+                                            label: newValue.inputValue
+                                        })
+                                    } else {
+                                        setValue(newValue)
+                                    }
+                                }}
+                                filterOptions={(options, params) => {
+                                    const filtered = filter(options, params)
+
+                                    // Suggest the creation of a new value
+                                    if (params.inputValue !== "") {
+                                        filtered.push({
+                                            inputValue: params.inputValue,
+                                            label: `Add "${params.inputValue}"`
+                                        })
+                                    }
+
+                                    return filtered
+                                }}
+                                selectOnFocus
+                                clearOnBlur
+                                handleHomeEndKeys
+                                id="free-solo-with-text-demo"
+                                options={unusedChips}
+                                getOptionLabel={(option) => {
+                                    console.log(option)
+                                    // Value selected with enter, right from the input
+                                    if (typeof option === "string") {
+                                        return option
+                                    }
+                                    // Add "xxx" option created dynamically
+                                    if (option.inputValue) {
+                                        return option.inputValue
+                                    }
+                                    // Regular option
+                                    return option.label
+                                }}
+                                renderOption={(option) => option.label}
+                                style={{ width: 300 }}
+                                freeSolo
+                                renderInput={(params) => (
+                                    <TextField {...params} variant="outlined" />
+                                )}
                             />
-                        )}
-                    />
-                )}
+                        </Box>
+                    </Menu>
+                </Box>
             </Box>
         </Box>
     )
