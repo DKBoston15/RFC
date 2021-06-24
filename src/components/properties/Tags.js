@@ -40,11 +40,15 @@ const useStyles = makeStyles(() => ({
         cursor: "pointer"
     },
     autocomplete: {
-        marginTop: ".5em"
+        marginTop: ".5em",
+        marginLeft: ".5rem",
+        marginRight: ".5rem",
+        width: 150
     },
     tagAddContainer: {
         display: "flex",
-        flexDirection: "column"
+        flexDirection: "column",
+        height: "5em"
     }
 }))
 const filter = createFilterOptions()
@@ -98,7 +102,7 @@ export default function Tags({ rfcInfo, tags, workspaceID }) {
         setChipData([...chipData, newTagObj])
         const unusedTags = filterByReference(unusedChips, newArr)
         setUnusedChips(unusedTags)
-        setValue("")
+        setValue(null)
     }
 
     const addNewWorkspaceTag = async (newTag) => {
@@ -192,7 +196,6 @@ export default function Tags({ rfcInfo, tags, workspaceID }) {
 
                                     return filtered
                                 }}
-                                selectOnFocus
                                 clearOnBlur
                                 handleHomeEndKeys
                                 id="free-solo-with-text-demo"
@@ -210,10 +213,15 @@ export default function Tags({ rfcInfo, tags, workspaceID }) {
                                     return option.label
                                 }}
                                 renderOption={(option) => option.label}
-                                style={{ width: 300 }}
+                                className={classes.autocomplete}
                                 freeSolo
                                 renderInput={(params) => (
-                                    <TextField {...params} variant="outlined" />
+                                    <TextField
+                                        placeholder="Add Tag..."
+                                        {...params}
+                                        variant="outlined"
+                                        size="small"
+                                    />
                                 )}
                             />
                         </Box>
