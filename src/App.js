@@ -67,6 +67,12 @@ export default function App() {
                             component={Dashboard}
                             isAuth={user}
                         />
+                        <ProtectedRoute
+                            exact
+                            path="/dashboard/"
+                            component={Dashboard}
+                            isAuth={user}
+                        />
                         <Route path="/sign-up">
                             <SignUp />
                         </Route>

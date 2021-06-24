@@ -50,3 +50,27 @@ export const getWorkspaceID = async (user_id) => {
     }
     return data[0].workspace_id
 }
+
+export const getWorkspaceTags = async (workspace_id) => {
+    const { data: workspace_data, workspace_error } = await supabase
+        .from("workspaces")
+        .select(`tags`)
+        .eq("id", workspace_id)
+    if (workspace_error) {
+        return { status: "error", msg: workspace_error.message }
+    }
+    return workspace_data[0]
+}
+
+export const addWorkspaceTags = async (workspace_id, tags) => {
+    console.log(tags)
+    const { data, error } = await supabase
+        .from("workspaces")
+        .update({ tags: tags })
+        .eq("id", workspace_id)
+    if (error) {
+        console.log(error)
+        return { status: "error", msg: error.message }
+    }
+    return data
+}

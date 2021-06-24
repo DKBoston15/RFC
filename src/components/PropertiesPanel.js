@@ -49,7 +49,7 @@ const useStyles = makeStyles({
     }
 })
 
-export default function PropertiesPanel({ rfcInfo }) {
+export default function PropertiesPanel({ rfcInfo, tags, workspaceID }) {
     const classes = useStyles()
     const { user } = useAuth()
     useEffect(() => {
@@ -97,7 +97,11 @@ export default function PropertiesPanel({ rfcInfo }) {
                                 variant="caption"
                                 className={classes.propertyHeader}
                             >
-                                <Tags rfcInfo={rfcInfo} />
+                                <Tags
+                                    rfcInfo={rfcInfo}
+                                    tags={tags}
+                                    workspaceID={workspaceID}
+                                />
                             </Typography>
                         </Box>
                         <Box>

@@ -1,18 +1,13 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { makeStyles } from "@material-ui/core/styles"
 import Chip from "@material-ui/core/Chip"
-import {
-    Box,
-    Typography,
-    Menu,
-    Divider,
-    FormControlLabel,
-    Checkbox
-} from "@material-ui/core"
+import { Box, Typography, Menu } from "@material-ui/core"
 import Autocomplete, {
     createFilterOptions
 } from "@material-ui/lab/Autocomplete"
 import TextField from "@material-ui/core/TextField"
+import { updateRfcTag } from "../../utils/rfcUtils"
+import { addWorkspaceTags } from "../../utils/workspaceUtils"
 
 const useStyles = makeStyles(() => ({
     statusContainer: {
@@ -54,38 +49,22 @@ const useStyles = makeStyles(() => ({
 }))
 const filter = createFilterOptions()
 
-// * TODO Tag Operations
-// TODO Get Current RFC Tags
-// TODO Populate Tags on Property Panel
-// TODO Get list of available workspace tags, not already on RFC
-// TODO On new tag, supply autocomplete with unused tags
-// TODO On available tag addition, update RFC tags, update unused tags array
-// TODO On new tag creation, update RFC tags, update unused tags array, update available workspace tags
-
-export default function Tags() {
+export default function Tags({ rfcInfo, tags, workspaceID }) {
     const classes = useStyles()
     const [value, setValue] = useState(null)
-    const [chipData, setChipData] = useState([
-        { key: 0, label: "Level 1" },
-        { key: 1, label: "Level 2" },
-        { key: 2, label: "Level 3" },
-        { key: 3, label: "Level 4" },
-        { key: 4, label: "Level 5" },
-        { key: 5, label: "Level 6" },
-        { key: 6, label: "Level 7" },
-        { key: 7, label: "Level 8" },
-        { key: 8, label: "Level 9" }
-    ])
-    const [unusedChips, setUnusedChips] = useState([
-        { key: 11, label: "Test" },
-        { key: 12, label: "Test 2" }
-    ])
+    const [chipData, setChipData] = useState([])
+    const [unusedChips, setUnusedChips] = useState([])
     const [addTag, setAddTag] = useState(false)
 
-    const handleDelete = (chipToDelete) => () => {
+    const handleDelete = async (chipToDelete) => {
+        console.log("Deleting")
         setChipData((chips) =>
             chips.filter((chip) => chip.key !== chipToDelete.key)
         )
+        const newRfcTagArr = chipData.filter(
+            (chip) => chip.key !== chipToDelete.key
+        )
+        await updateRfcTag(rfcInfo.id, newRfcTagArr)
     }
 
     const addNewTag = (event) => {
@@ -98,6 +77,46 @@ export default function Tags() {
     const handleClose = () => {
         setAnchorEl(null)
     }
+
+    const filterByReference = (arr1, arr2) => {
+        let res = []
+        res = arr1.filter((el) => {
+            return !arr2.find((element) => {
+                return element.key === el.key
+            })
+        })
+        return res
+    }
+
+    const addNewRfcTag = async (newTag) => {
+        const newTagObj = { key: newTag, label: newTag }
+        const newTagArr = [...rfcInfo.tags, newTagObj]
+        await updateRfcTag(rfcInfo.id, newTagArr)
+        setAnchorEl(null)
+        console.log("New RFC Tag Added")
+        const newArr = [...chipData, newTagObj]
+        setChipData([...chipData, newTagObj])
+        const unusedTags = filterByReference(unusedChips, newArr)
+        setUnusedChips(unusedTags)
+        setValue("")
+    }
+
+    const addNewWorkspaceTag = async (newTag) => {
+        setAnchorEl(null)
+        const newTagObj = { key: newTag, label: newTag }
+        const newTagArr = [...tags.tags, newTagObj]
+        await addWorkspaceTags(workspaceID, newTagArr)
+        console.log("New Tag Added")
+    }
+
+    useEffect(() => {
+        setChipData(rfcInfo.tags)
+        if (tags) {
+            setUnusedChips(tags.tags)
+            const unusedTags = filterByReference(tags.tags, rfcInfo.tags)
+            setUnusedChips(unusedTags)
+        }
+    }, [rfcInfo.tags, tags])
 
     return (
         <Box className={classes.container}>
@@ -113,7 +132,7 @@ export default function Tags() {
                                 size="small"
                                 icon={icon}
                                 label={data.label}
-                                onDelete={handleDelete(data)}
+                                onDelete={() => handleDelete(data)}
                                 className={classes.chip}
                             />
                         )
@@ -139,9 +158,11 @@ export default function Tags() {
                                 value={value}
                                 onChange={(event, newValue) => {
                                     if (typeof newValue === "string") {
+                                        console.log(newValue)
                                         setValue({
                                             label: newValue
                                         })
+                                        addNewRfcTag(newValue.label)
                                     } else if (
                                         newValue &&
                                         newValue.inputValue
@@ -150,8 +171,12 @@ export default function Tags() {
                                         setValue({
                                             label: newValue.inputValue
                                         })
+                                        addNewRfcTag(newValue.inputValue)
+                                        addNewWorkspaceTag(newValue.inputValue)
                                     } else {
+                                        console.log(newValue)
                                         setValue(newValue)
+                                        addNewRfcTag(newValue.label)
                                     }
                                 }}
                                 filterOptions={(options, params) => {
@@ -173,7 +198,6 @@ export default function Tags() {
                                 id="free-solo-with-text-demo"
                                 options={unusedChips}
                                 getOptionLabel={(option) => {
-                                    console.log(option)
                                     // Value selected with enter, right from the input
                                     if (typeof option === "string") {
                                         return option

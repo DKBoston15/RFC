@@ -1,52 +1,30 @@
 import React, { useState, useEffect } from "react"
 import { useAuth } from "../config/auth"
-import { Box, Grid } from "@material-ui/core"
+import { Box, Grid, Button } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
 import Snackbar from "@material-ui/core/Snackbar"
 import Alert from "@material-ui/lab/Alert"
 import queryString from "query-string"
-import { useLocation, withRouter } from "react-router-dom"
+import { useLocation, withRouter, Link } from "react-router-dom"
 import Sidebar from "../components/Sidebar"
 import Tiptap from "../components/Tiptap"
 import TipTapContainer from "../components/TipTapContainer"
 import PropertiesPanel from "../components/PropertiesPanel"
 import { Helmet } from "react-helmet"
 import "./dashboard_styles.scss"
-import { getRfc } from "../utils/rfcUtils"
+import { getRfc, getRfcs } from "../utils/rfcUtils"
+import { getWorkspaceID, getWorkspaceTags } from "../utils/workspaceUtils"
 
-const useStyles = makeStyles({
-    // buttonOne: {
-    //     color: "white",
-    //     minHeight: "48px",
-    //     backgroundColor: "rgba(49, 60, 78, 1)",
-    //     fontWeight: 600,
-    //     width: "22rem",
-    //     marginTop: "2em",
-    //     "&:hover": {
-    //         backgroundColor: "rgba(49, 60, 78, 0.5)"
-    //     }
-    // },
-    // buttonTwo: {
-    //     color: "white",
-    //     minHeight: "48px",
-    //     backgroundColor: "rgba(138, 151, 177, 1)",
-    //     fontWeight: 600,
-    //     width: "22rem",
-    //     marginTop: "1.5em",
-    //     "&:hover": {
-    //         backgroundColor: "rgba(138, 151, 177, 0.5)"
-    //     }
-    // },
-    // tiptapContainer: {
-    //     marginLeft: "20em"
-    // }
-})
+const useStyles = makeStyles({})
 
 const Dashboard = ({ match }) => {
     const classes = useStyles()
     const { user, signOut } = useAuth()
     const [openRecoveryMsg, setOpenRecoveryMsg] = useState(false)
     const [rfcInfo, setRfcInfo] = useState()
+    const [rfcList, setRfcList] = useState()
+    const [workspaceID, setWorkspaceID] = useState()
+    const [tags, setTags] = useState()
     const { search } = useLocation()
     useEffect(() => {
         const values = queryString.parse(search)
@@ -57,22 +35,48 @@ const Dashboard = ({ match }) => {
             console.log(match.params.id)
             const data = await getRfc(match.params.id)
             setRfcInfo(data[0])
+
+            const retrievedWorkspaceID = await getWorkspaceID(user.id)
+            setWorkspaceID(retrievedWorkspaceID)
+            console.log(retrievedWorkspaceID)
+            const rfcs = await getRfcs(retrievedWorkspaceID)
+            setRfcList(rfcs)
+            const tags = await getWorkspaceTags(retrievedWorkspaceID)
+            setTags(tags)
         }
         getRFCData()
-    }, [search, match])
+    }, [search, match, user.id])
 
     return (
-        <div class="container">
-            <div class="Sidebar">
-                <Sidebar user={user} signOut={signOut} />
-            </div>
-            <div class="Content">
-                <TipTapContainer />
-            </div>
-            <div class="Properties">
-                <PropertiesPanel rfcInfo={rfcInfo} />
-            </div>
-        </div>
+        <>
+            {rfcInfo && (
+                <div class="container">
+                    <div class="Sidebar">
+                        <Sidebar user={user} signOut={signOut} />
+                    </div>
+                    <div class="Content">
+                        <TipTapContainer />
+                    </div>
+                    <div class="Properties">
+                        <PropertiesPanel
+                            rfcInfo={rfcInfo}
+                            tags={tags}
+                            workspaceID={workspaceID}
+                        />
+                    </div>
+                </div>
+            )}
+            {!rfcInfo && rfcList && (
+                <div>
+                    Dashboard
+                    {rfcList.map((rfc) => (
+                        <Link to={`dashboard/${rfc.id}`}>
+                            <Button key={rfc.id}>{rfc.id}</Button>
+                        </Link>
+                    ))}
+                </div>
+            )}
+        </>
         // <>
         //     <Helmet>
         //         <title>RFC | Dashboard</title>
