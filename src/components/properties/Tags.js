@@ -122,6 +122,11 @@ export default function Tags({ rfcInfo, tags, workspaceID }) {
         }
     }, [rfcInfo.tags, tags])
 
+    // TODO Fix add new workspace tag to account for multiple new tags at once, currently it only writes the latest tag.
+    // TODO Remove blug highlight border on autocomplete component
+    // TODO Handle chip wrapping
+    // TODO Style the dropdown menu to look better
+
     return (
         <Box className={classes.container}>
             <Typography variant="caption" className={classes.sectionHeader}>
