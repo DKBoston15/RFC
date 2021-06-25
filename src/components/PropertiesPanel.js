@@ -8,6 +8,7 @@ import Status from "./properties/Status"
 import Priority from "./properties/Priority"
 import Author from "./properties/Author"
 import Tags from "./properties/Tags"
+import Assignee from "./properties/Assignee"
 
 const useStyles = makeStyles({
     panel: {
@@ -109,7 +110,7 @@ export default function PropertiesPanel({ rfcInfo, tags, workspaceID }) {
                                 variant="caption"
                                 className={classes.propertyHeader}
                             >
-                                Assignees
+                                <Assignee rfcInfo={rfcInfo} />
                             </Typography>
                         </Box>
                     </Box>

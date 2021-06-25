@@ -6,8 +6,8 @@ import Autocomplete, {
     createFilterOptions
 } from "@material-ui/lab/Autocomplete"
 import TextField from "@material-ui/core/TextField"
-import { updateRfcTag } from "../../utils/rfcUtils"
-import { addWorkspaceTags } from "../../utils/workspaceUtils"
+import { updateRfcTag, getRfc } from "../../utils/rfcUtils"
+import { addWorkspaceTags, getWorkspaceTags } from "../../utils/workspaceUtils"
 
 const useStyles = makeStyles(() => ({
     statusContainer: {
@@ -18,7 +18,7 @@ const useStyles = makeStyles(() => ({
     tagContainer: {
         display: "flex",
         flexWrap: "wrap",
-        width: "28em",
+        width: "24em",
         alignItems: "center"
     },
     chip: {
@@ -43,12 +43,45 @@ const useStyles = makeStyles(() => ({
         marginTop: ".5em",
         marginLeft: ".5rem",
         marginRight: ".5rem",
-        width: 150
+        width: 150,
+        borderColor: "red !important",
+        "& 	.MuiAutocomplete-paper": {
+            elevation: 0
+        }
     },
     tagAddContainer: {
         display: "flex",
-        flexDirection: "column",
-        height: "5em"
+        flexDirection: "column"
+    },
+    textInput: {
+        "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
+            borderColor: "white"
+        },
+        "&:hover .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
+            borderColor: "white"
+        },
+        "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
+            {
+                borderColor: "white"
+            },
+        "& .MuiOutlinedInput-input": {
+            color: "gray"
+        },
+        "&:hover .MuiOutlinedInput-input": {
+            color: "gray"
+        },
+        "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-input": {
+            color: "gray"
+        },
+        "& .MuiInputLabel-outlined": {
+            color: "gray"
+        },
+        "&:hover .MuiInputLabel-outlined": {
+            color: "gray"
+        },
+        "& .MuiInputLabel-outlined.Mui-focused": {
+            color: "gray"
+        }
     }
 }))
 const filter = createFilterOptions()
@@ -60,15 +93,45 @@ export default function Tags({ rfcInfo, tags, workspaceID }) {
     const [unusedChips, setUnusedChips] = useState([])
     const [addTag, setAddTag] = useState(false)
 
+    function compare(a, b) {
+        const tag1 = a.label.toUpperCase()
+        const tag2 = b.label.toUpperCase()
+
+        let comparison = 0
+        if (tag1 > tag2) {
+            comparison = 1
+        } else if (tag1 < tag2) {
+            comparison = -1
+        }
+        return comparison
+    }
+
     const handleDelete = async (chipToDelete) => {
-        console.log("Deleting")
+        // Update Tag UI
         setChipData((chips) =>
             chips.filter((chip) => chip.key !== chipToDelete.key)
         )
+
+        // Create New RFC Tag Array
         const newRfcTagArr = chipData.filter(
             (chip) => chip.key !== chipToDelete.key
         )
+
+        // Update RFC Tag Array
         await updateRfcTag(rfcInfo.id, newRfcTagArr)
+
+        // Update Unused Tags
+        // Get Current RFC Tags
+        const currentRfcTags = await getRfc(rfcInfo.id)
+        const currentWorkspaceTags = await getWorkspaceTags(workspaceID)
+        console.log(currentRfcTags[0].tags)
+        console.log(unusedChips)
+        const unusedTags = filterByReference(
+            currentWorkspaceTags.tags,
+            currentRfcTags[0].tags
+        )
+        console.log(unusedTags)
+        setUnusedChips(unusedTags.sort(compare))
     }
 
     const addNewTag = (event) => {
@@ -93,22 +156,35 @@ export default function Tags({ rfcInfo, tags, workspaceID }) {
     }
 
     const addNewRfcTag = async (newTag) => {
-        const newTagObj = { key: newTag, label: newTag }
-        const newTagArr = [...rfcInfo.tags, newTagObj]
-        await updateRfcTag(rfcInfo.id, newTagArr)
+        // Close Menu
         setAnchorEl(null)
-        console.log("New RFC Tag Added")
-        const newArr = [...chipData, newTagObj]
-        setChipData([...chipData, newTagObj])
-        const unusedTags = filterByReference(unusedChips, newArr)
-        setUnusedChips(unusedTags)
         setValue(null)
+        // Get Current RFC Tags
+        const currentRfcTags = await getRfc(rfcInfo.id)
+
+        // Construct New Full RFC Tag Array
+        const newRfcTagArr = [
+            ...currentRfcTags[0].tags,
+            { key: newTag, label: newTag }
+        ]
+
+        console.log(newRfcTagArr)
+
+        // Update UI With New Tag Array
+        setChipData(newRfcTagArr)
+
+        // Update Unused Tag Array
+        const unusedTags = filterByReference(unusedChips, newRfcTagArr)
+        setUnusedChips(unusedTags.sort(compare))
+
+        // Update RFC Tag Array In DB
+        await updateRfcTag(rfcInfo.id, newRfcTagArr)
     }
 
     const addNewWorkspaceTag = async (newTag) => {
         setAnchorEl(null)
         const newTagObj = { key: newTag, label: newTag }
-        const newTagArr = [...tags.tags, newTagObj]
+        const newTagArr = [...chipData, ...unusedChips, newTagObj]
         await addWorkspaceTags(workspaceID, newTagArr)
         console.log("New Tag Added")
     }
@@ -116,16 +192,11 @@ export default function Tags({ rfcInfo, tags, workspaceID }) {
     useEffect(() => {
         setChipData(rfcInfo.tags)
         if (tags) {
-            setUnusedChips(tags.tags)
+            setUnusedChips(tags.tags.sort(compare))
             const unusedTags = filterByReference(tags.tags, rfcInfo.tags)
-            setUnusedChips(unusedTags)
+            setUnusedChips(unusedTags.sort(compare))
         }
     }, [rfcInfo.tags, tags])
-
-    // TODO Fix add new workspace tag to account for multiple new tags at once, currently it only writes the latest tag.
-    // TODO Remove blug highlight border on autocomplete component
-    // TODO Handle chip wrapping
-    // TODO Style the dropdown menu to look better
 
     return (
         <Box className={classes.container}>
@@ -161,9 +232,17 @@ export default function Tags({ rfcInfo, tags, workspaceID }) {
                         keepMounted
                         open={Boolean(anchorEl)}
                         onClose={handleClose}
+                        autoFocus
+                        elevation={1}
                     >
                         <Box className={classes.tagAddContainer}>
                             <Autocomplete
+                                ListboxProps={{
+                                    style: {
+                                        maxHeight: "10em",
+                                        maxWidth: "250px"
+                                    }
+                                }}
                                 value={value}
                                 onChange={(event, newValue) => {
                                     if (typeof newValue === "string") {
@@ -202,6 +281,7 @@ export default function Tags({ rfcInfo, tags, workspaceID }) {
                                     return filtered
                                 }}
                                 clearOnBlur
+                                openOnFocus
                                 handleHomeEndKeys
                                 id="free-solo-with-text-demo"
                                 options={unusedChips}
@@ -222,10 +302,16 @@ export default function Tags({ rfcInfo, tags, workspaceID }) {
                                 freeSolo
                                 renderInput={(params) => (
                                     <TextField
+                                        className={classes.textInput}
                                         placeholder="Add Tag..."
                                         {...params}
                                         variant="outlined"
                                         size="small"
+                                        inputRef={(input) =>
+                                            setTimeout(() => {
+                                                input && input.focus()
+                                            }, 100)
+                                        }
                                     />
                                 )}
                             />
