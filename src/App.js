@@ -15,6 +15,7 @@ import SignIn from "./pages/SignIn"
 import Dashboard from "./pages/Dashboard"
 import PasswordReset from "./pages/PasswordReset"
 import WorkspaceSetup from "./pages/WorkspaceSetup"
+import FlexSelectTest from "./pages/FlexSelectTest"
 
 import CssBaseline from "@material-ui/core/CssBaseline"
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles"
@@ -73,6 +74,9 @@ export default function App() {
                             component={Dashboard}
                             isAuth={user}
                         />
+                        <Route path="/flex-select">
+                            <FlexSelectTest />
+                        </Route>
                         <Route path="/sign-up">
                             <SignUp />
                         </Route>

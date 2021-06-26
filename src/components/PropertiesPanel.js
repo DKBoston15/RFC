@@ -53,9 +53,6 @@ const useStyles = makeStyles({
 export default function PropertiesPanel({ rfcInfo, tags, workspaceID }) {
     const classes = useStyles()
     const { user } = useAuth()
-    useEffect(() => {
-        console.log(rfcInfo)
-    }, [rfcInfo])
     return (
         <>
             {rfcInfo && (

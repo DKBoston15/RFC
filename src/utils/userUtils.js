@@ -45,3 +45,14 @@ export const updateUserInfo = async (user_id, full_name, avatar_url) => {
 
     return data
 }
+
+export const getUsers = async (workspaceID) => {
+    const { data, error } = await supabase
+        .from("users")
+        .select(`id, role, avatar_url, signup_flow_complete, full_name`)
+        .eq("workspace_id", workspaceID)
+    if (error) {
+        return { status: "error", msg: error.message }
+    }
+    return data
+}
