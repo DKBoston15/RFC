@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from "react"
 import { makeStyles } from "@material-ui/core/styles"
 import Chip from "@material-ui/core/Chip"
-import { Box, Typography, Menu } from "@material-ui/core"
-import Autocomplete, {
-    createFilterOptions
-} from "@material-ui/lab/Autocomplete"
-import TextField from "@material-ui/core/TextField"
+import { Box, Typography } from "@material-ui/core"
 import { updateRfcTag, getRfc } from "../../utils/rfcUtils"
 import { addWorkspaceTags, getWorkspaceTags } from "../../utils/workspaceUtils"
+
+import FlexSelect from "../FlexSelect"
 
 const useStyles = makeStyles(() => ({
     statusContainer: {
@@ -84,119 +82,116 @@ const useStyles = makeStyles(() => ({
         }
     }
 }))
-const filter = createFilterOptions()
 
-export default function Tags({ rfcInfo, tags, workspaceID }) {
-    const classes = useStyles()
-    const [value, setValue] = useState(null)
-    const [chipData, setChipData] = useState([])
-    const [unusedChips, setUnusedChips] = useState([])
-    const [addTag, setAddTag] = useState(false)
+function compare(a, b) {
+    const tag1 = a.label.toUpperCase()
+    const tag2 = b.label.toUpperCase()
 
-    function compare(a, b) {
-        const tag1 = a.label.toUpperCase()
-        const tag2 = b.label.toUpperCase()
-
-        let comparison = 0
-        if (tag1 > tag2) {
-            comparison = 1
-        } else if (tag1 < tag2) {
-            comparison = -1
-        }
-        return comparison
+    let comparison = 0
+    if (tag1 > tag2) {
+        comparison = 1
+    } else if (tag1 < tag2) {
+        comparison = -1
     }
+    return comparison
+}
 
-    const handleDelete = async (chipToDelete) => {
-        // Update Tag UI
-        setChipData((chips) =>
-            chips.filter((chip) => chip.key !== chipToDelete.key)
-        )
-
-        // Create New RFC Tag Array
-        const newRfcTagArr = chipData.filter(
-            (chip) => chip.key !== chipToDelete.key
-        )
-
-        // Update RFC Tag Array
-        await updateRfcTag(rfcInfo.id, newRfcTagArr)
-
-        // Update Unused Tags
-        // Get Current RFC Tags
-        const currentRfcTags = await getRfc(rfcInfo.id)
-        const currentWorkspaceTags = await getWorkspaceTags(workspaceID)
-        console.log(currentRfcTags[0].tags)
-        console.log(unusedChips)
-        const unusedTags = filterByReference(
-            currentWorkspaceTags.tags,
-            currentRfcTags[0].tags
-        )
-        console.log(unusedTags)
-        setUnusedChips(unusedTags.sort(compare))
-    }
-
-    const addNewTag = (event) => {
-        setAnchorEl(event.currentTarget)
-        setAddTag(true)
-    }
-
-    const [anchorEl, setAnchorEl] = React.useState(null)
-
-    const handleClose = () => {
-        setAnchorEl(null)
-    }
-
-    const filterByReference = (arr1, arr2) => {
-        let res = []
-        res = arr1.filter((el) => {
-            return !arr2.find((element) => {
-                return element.key === el.key
-            })
+const filterByReference = (arr1, arr2) => {
+    let res = []
+    res = arr1.filter((el) => {
+        return !arr2.find((element) => {
+            return element.key === el.key
         })
-        return res
-    }
+    })
+    return res
+}
 
-    const addNewRfcTag = async (newTag) => {
-        // Close Menu
-        setAnchorEl(null)
-        setValue(null)
-        // Get Current RFC Tags
-        const currentRfcTags = await getRfc(rfcInfo.id)
+export default function Tags({ rfcInfo, workspaceTags, workspaceID }) {
+    const classes = useStyles()
 
-        // Construct New Full RFC Tag Array
-        const newRfcTagArr = [
-            ...currentRfcTags[0].tags,
-            { key: newTag, label: newTag }
-        ]
+    const addTagComponent = (
+        <Typography className={classes.addTag} variant="caption">
+            + Add Tag
+        </Typography>
+    )
 
-        console.log(newRfcTagArr)
+    const [createdItem, setCreatedItem] = useState(null)
+    const [availableTags, setAvailableTags] = useState([])
+    const [selectedItem, setSelectedItem] = useState(null)
 
-        // Update UI With New Tag Array
-        setChipData(newRfcTagArr)
+    const [chipData, setChipData] = useState(rfcInfo.tags)
 
-        // Update Unused Tag Array
-        const unusedTags = filterByReference(unusedChips, newRfcTagArr)
-        setUnusedChips(unusedTags.sort(compare))
+    useEffect(() => {
+        if (selectedItem) {
+            console.log(selectedItem)
+            setChipData([...chipData, selectedItem])
+            const updateRfc = async () => {
+                await updateRfcTag(rfcInfo.id, [...chipData, selectedItem])
+            }
+            const updateUnused = async () => {
+                const currentWorkspaceTags = await getWorkspaceTags(workspaceID)
+                const unusedTags = filterByReference(
+                    currentWorkspaceTags.tags,
+                    [...chipData, selectedItem]
+                )
+                console.log(unusedTags)
+                setAvailableTags(unusedTags.sort(compare))
+            }
+            updateRfc()
+            updateUnused()
+        }
+    }, [selectedItem])
 
-        // Update RFC Tag Array In DB
-        await updateRfcTag(rfcInfo.id, newRfcTagArr)
-    }
-
-    const addNewWorkspaceTag = async (newTag) => {
-        setAnchorEl(null)
-        const newTagObj = { key: newTag, label: newTag }
-        const newTagArr = [...chipData, ...unusedChips, newTagObj]
+    const addNewWorkspaceTag = async () => {
+        setSelectedItem(createdItem)
+        console.log(createdItem)
+        const newTagArr = [...chipData, ...availableTags, createdItem]
+        console.log(newTagArr)
         await addWorkspaceTags(workspaceID, newTagArr)
         console.log("New Tag Added")
     }
 
     useEffect(() => {
-        setChipData(rfcInfo.tags)
-        if (tags) {
-            setUnusedChips(tags.tags.sort(compare))
-            const unusedTags = filterByReference(tags.tags, rfcInfo.tags)
-            setUnusedChips(unusedTags.sort(compare))
+        if (createdItem) {
+            addNewWorkspaceTag()
         }
-    }, [rfcInfo.tags, tags])
+    }, [createdItem])
+
+    const handleDelete = async (chipToDelete) => {
+        console.log(chipToDelete)
+        setChipData((chips) =>
+            chips.filter((chip) => chip.key !== chipToDelete.key)
+        )
+        const newRfcTagArr = chipData.filter(
+            (chip) => chip.key !== chipToDelete.key
+        )
+        console.log(newRfcTagArr)
+        await updateRfcTag(rfcInfo.id, newRfcTagArr)
+
+        // Update Unused Tags
+        const currentRfcTags = await getRfc(rfcInfo.id)
+        const currentWorkspaceTags = await getWorkspaceTags(workspaceID)
+        console.log(currentRfcTags[0].tags)
+        console.log(availableTags)
+        const unusedTags = filterByReference(
+            currentWorkspaceTags.tags,
+            currentRfcTags[0].tags
+        )
+        console.log(unusedTags)
+        setAvailableTags(unusedTags.sort(compare))
+    }
+
+    useEffect(() => {
+        if (workspaceTags) {
+            setAvailableTags(workspaceTags.tags.sort(compare))
+            const unusedTags = filterByReference(
+                workspaceTags.tags,
+                rfcInfo.tags
+            )
+            console.log(unusedTags)
+            setAvailableTags(unusedTags.sort(compare))
+        }
+    }, [workspaceTags, rfcInfo.tags])
 
     return (
         <Box className={classes.container}>
@@ -217,108 +212,108 @@ export default function Tags({ rfcInfo, tags, workspaceID }) {
                             />
                         )
                     })}
-                    <Typography
-                        onClick={addNewTag}
-                        className={classes.addTag}
-                        variant="caption"
-                        aria-controls="simple-menu"
-                        aria-haspopup="true"
-                    >
-                        + Add Tag
-                    </Typography>
-                    <Menu
-                        id="simple-menu"
-                        anchorEl={anchorEl}
-                        keepMounted
-                        open={Boolean(anchorEl)}
-                        onClose={handleClose}
-                        autoFocus
-                        elevation={1}
-                    >
-                        <Box className={classes.tagAddContainer}>
-                            <Autocomplete
-                                ListboxProps={{
-                                    style: {
-                                        maxHeight: "10em",
-                                        maxWidth: "250px"
-                                    }
-                                }}
-                                value={value}
-                                onChange={(event, newValue) => {
-                                    if (typeof newValue === "string") {
-                                        console.log(newValue)
-                                        setValue({
-                                            label: newValue
-                                        })
-                                        addNewRfcTag(newValue.label)
-                                    } else if (
-                                        newValue &&
-                                        newValue.inputValue
-                                    ) {
-                                        // Create a new value from the user input
-                                        setValue({
-                                            label: newValue.inputValue
-                                        })
-                                        addNewRfcTag(newValue.inputValue)
-                                        addNewWorkspaceTag(newValue.inputValue)
-                                    } else {
-                                        console.log(newValue)
-                                        setValue(newValue)
-                                        addNewRfcTag(newValue.label)
-                                    }
-                                }}
-                                filterOptions={(options, params) => {
-                                    const filtered = filter(options, params)
-
-                                    // Suggest the creation of a new value
-                                    if (params.inputValue !== "") {
-                                        filtered.push({
-                                            inputValue: params.inputValue,
-                                            label: `Add "${params.inputValue}"`
-                                        })
-                                    }
-
-                                    return filtered
-                                }}
-                                clearOnBlur
-                                openOnFocus
-                                handleHomeEndKeys
-                                id="free-solo-with-text-demo"
-                                options={unusedChips}
-                                getOptionLabel={(option) => {
-                                    // Value selected with enter, right from the input
-                                    if (typeof option === "string") {
-                                        return option
-                                    }
-                                    // Add "xxx" option created dynamically
-                                    if (option.inputValue) {
-                                        return option.inputValue
-                                    }
-                                    // Regular option
-                                    return option.label
-                                }}
-                                renderOption={(option) => option.label}
-                                className={classes.autocomplete}
-                                freeSolo
-                                renderInput={(params) => (
-                                    <TextField
-                                        className={classes.textInput}
-                                        placeholder="Add Tag..."
-                                        {...params}
-                                        variant="outlined"
-                                        size="small"
-                                        inputRef={(input) =>
-                                            setTimeout(() => {
-                                                input && input.focus()
-                                            }, 100)
-                                        }
-                                    />
-                                )}
-                            />
-                        </Box>
-                    </Menu>
+                    <FlexSelect
+                        placeholder="Tags..."
+                        setSelectedItem={setSelectedItem}
+                        items={availableTags}
+                        allowCreation={true}
+                        setCreatedItem={setCreatedItem}
+                        clickableComponent={addTagComponent}
+                    />
                 </Box>
             </Box>
         </Box>
     )
 }
+
+// <Menu
+//                         id="simple-menu"
+//                         anchorEl={anchorEl}
+//                         keepMounted
+//                         open={Boolean(anchorEl)}
+//                         onClose={handleClose}
+//                         autoFocus
+//                         elevation={1}
+//                     >
+//                         <Box className={classes.tagAddContainer}>
+//                             <Autocomplete
+//                                 ListboxProps={{
+//                                     style: {
+//                                         maxHeight: "10em",
+//                                         maxWidth: "250px"
+//                                     }
+//                                 }}
+//                                 value={value}
+//                                 onChange={(event, newValue) => {
+//                                     if (typeof newValue === "string") {
+//                                         console.log(newValue)
+//                                         setValue({
+//                                             label: newValue
+//                                         })
+//                                         addNewRfcTag(newValue.label)
+//                                     } else if (
+//                                         newValue &&
+//                                         newValue.inputValue
+//                                     ) {
+//                                         // Create a new value from the user input
+//                                         setValue({
+//                                             label: newValue.inputValue
+//                                         })
+//                                         addNewRfcTag(newValue.inputValue)
+//                                         addNewWorkspaceTag(newValue.inputValue)
+//                                     } else {
+//                                         console.log(newValue)
+//                                         setValue(newValue)
+//                                         addNewRfcTag(newValue.label)
+//                                     }
+//                                 }}
+//                                 filterOptions={(options, params) => {
+//                                     const filtered = filter(options, params)
+
+//                                     // Suggest the creation of a new value
+//                                     if (params.inputValue !== "") {
+//                                         filtered.push({
+//                                             inputValue: params.inputValue,
+//                                             label: `Add "${params.inputValue}"`
+//                                         })
+//                                     }
+
+//                                     return filtered
+//                                 }}
+//                                 clearOnBlur
+//                                 openOnFocus
+//                                 handleHomeEndKeys
+//                                 id="free-solo-with-text-demo"
+//                                 options={unusedChips}
+//                                 getOptionLabel={(option) => {
+//                                     // Value selected with enter, right from the input
+//                                     if (typeof option === "string") {
+//                                         return option
+//                                     }
+//                                     // Add "xxx" option created dynamically
+//                                     if (option.inputValue) {
+//                                         return option.inputValue
+//                                     }
+//                                     // Regular option
+//                                     return option.label
+//                                 }}
+//                                 renderOption={(option) => option.label}
+//                                 className={classes.autocomplete}
+//                                 freeSolo
+//                                 renderInput={(params) => (
+//                                     <TextField
+//                                         className={classes.textInput}
+//                                         placeholder="Add Tag..."
+//                                         {...params}
+//                                         variant="outlined"
+//                                         size="small"
+//                                         inputRef={(input) =>
+//                                             setTimeout(() => {
+//                                                 input && input.focus()
+//                                             }, 100)
+//                                         }
+//                                     />
+//                                 )}
+//                             />
+//                         </Box>
+//                     </Menu>

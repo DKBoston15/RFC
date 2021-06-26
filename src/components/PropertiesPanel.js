@@ -50,7 +50,11 @@ const useStyles = makeStyles({
     }
 })
 
-export default function PropertiesPanel({ rfcInfo, tags, workspaceID }) {
+export default function PropertiesPanel({
+    rfcInfo,
+    workspaceTags,
+    workspaceID
+}) {
     const classes = useStyles()
     const { user } = useAuth()
     return (
@@ -97,7 +101,7 @@ export default function PropertiesPanel({ rfcInfo, tags, workspaceID }) {
                             >
                                 <Tags
                                     rfcInfo={rfcInfo}
-                                    tags={tags}
+                                    workspaceTags={workspaceTags}
                                     workspaceID={workspaceID}
                                 />
                             </Typography>

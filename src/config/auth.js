@@ -12,7 +12,6 @@ export const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
-        console.log("Context Loading")
         // get session data if there is an active session
         const session = supabase.auth.session()
 

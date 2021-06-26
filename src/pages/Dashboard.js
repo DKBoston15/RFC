@@ -24,7 +24,7 @@ const Dashboard = ({ match }) => {
     const [rfcInfo, setRfcInfo] = useState()
     const [rfcList, setRfcList] = useState()
     const [workspaceID, setWorkspaceID] = useState()
-    const [tags, setTags] = useState()
+    const [workspaceTags, setWorkspaceTags] = useState()
     const { search } = useLocation()
     useEffect(() => {
         const values = queryString.parse(search)
@@ -32,17 +32,15 @@ const Dashboard = ({ match }) => {
             setOpenRecoveryMsg(true)
         }
         const getRFCData = async () => {
-            console.log(match.params.id)
             const data = await getRfc(match.params.id)
             setRfcInfo(data[0])
 
             const retrievedWorkspaceID = await getWorkspaceID(user.id)
             setWorkspaceID(retrievedWorkspaceID)
-            console.log(retrievedWorkspaceID)
             const rfcs = await getRfcs(retrievedWorkspaceID)
             setRfcList(rfcs)
             const tags = await getWorkspaceTags(retrievedWorkspaceID)
-            setTags(tags)
+            setWorkspaceTags(tags)
         }
         getRFCData()
     }, [search, match, user.id])
@@ -60,7 +58,7 @@ const Dashboard = ({ match }) => {
                     <div class="Properties">
                         <PropertiesPanel
                             rfcInfo={rfcInfo}
-                            tags={tags}
+                            workspaceTags={workspaceTags}
                             workspaceID={workspaceID}
                         />
                     </div>

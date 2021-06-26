@@ -11,7 +11,7 @@ const useStyles = makeStyles({
         alignItems: "center"
     },
     statusContainer: {
-        marginLeft: "1em",
+        marginLeft: ".3em",
         display: "flex",
         alignItems: "center"
     },
@@ -19,7 +19,7 @@ const useStyles = makeStyles({
         width: "4em"
     },
     authorName: {
-        marginLeft: "1em"
+        marginLeft: "0.4em"
     }
 })
 

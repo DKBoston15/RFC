@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react"
+import React, { useState, useRef, useEffect } from "react"
 import Button from "@material-ui/core/Button"
 import Menu from "@material-ui/core/Menu"
 import Box from "@material-ui/core/Box"
@@ -42,9 +42,9 @@ const iconSelector = {
 }
 
 const useStyles = makeStyles({
-    button: {
-        color: "white"
-    },
+    // button: {
+    //     color: "white"
+    // },
     menuContainer: {
         display: "flex",
         flexDirection: "column",
@@ -100,7 +100,8 @@ export default function FlexSelect({
     setSelectedItem,
     allowCreation,
     setCreatedItem,
-    avatar
+    avatar,
+    clickableComponent
 }) {
     const classes = useStyles()
     const inputRefs = useRef(null)
@@ -116,6 +117,7 @@ export default function FlexSelect({
 
     const handleClose = () => {
         setAnchorEl(null)
+        setSearchValue("")
     }
 
     const [filteredItems, setFilteredItems] = useState(items)
@@ -135,28 +137,33 @@ export default function FlexSelect({
     }
 
     const onSelect = (label) => {
-        let filteredItem = items.filter((item) => item.label === label)
         handleClose()
+        let filteredItem = items.filter((item) => item.label === label)
         setSelectedItem(filteredItem[0])
     }
 
     const createNewItem = (submittedSearchValue) => {
+        handleClose()
         setCreatedItem({
             key: snakeCase(submittedSearchValue),
             label: submittedSearchValue
         })
     }
 
+    useEffect(() => {
+        setFilteredItems(items)
+    }, [items])
+
     return (
-        <>
-            <Button
+        <Box>
+            <Box
                 aria-controls="simple-menu"
                 aria-haspopup="true"
                 onClick={handleClick}
                 className={classes.button}
             >
-                Open Menu
-            </Button>
+                {clickableComponent}
+            </Box>
             <Menu
                 id="simple-menu"
                 anchorEl={anchorEl}
@@ -208,10 +215,10 @@ export default function FlexSelect({
                         className={classes.createNewItem}
                         onClick={() => createNewItem(searchValue)}
                     >
-                        {`Create ${searchValue}`}
+                        {searchValue && <span>{`Create ${searchValue}`}</span>}
                     </Box>
                 )}
             </Menu>
-        </>
+        </Box>
     )
 }

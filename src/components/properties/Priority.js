@@ -6,6 +6,8 @@ import SignalCellular3BarIcon from "@material-ui/icons/SignalCellular3Bar"
 import SignalCellular4BarIcon from "@material-ui/icons/SignalCellular4Bar"
 import SignalCellularConnectedNoInternet4BarIcon from "@material-ui/icons/SignalCellularConnectedNoInternet4Bar"
 
+import FlexSelect from "../FlexSelect"
+
 import { updateRfcPriority } from "../../utils/rfcUtils"
 
 const useStyles = makeStyles({
@@ -37,18 +39,10 @@ const useStyles = makeStyles({
 
 export default function Priority({ rfcInfo }) {
     const classes = useStyles()
-    const [anchorEl, setAnchorEl] = useState(null)
-    const [currentSelection, setCurrentSelection] = useState(rfcInfo.priority)
-
-    useEffect(() => {
-        setCurrentSelection(rfcInfo.priority)
-    }, [rfcInfo])
-
-    let priority
-    const currentStatus = () => {
-        switch (currentSelection) {
+    const currentStatus = (key) => {
+        switch (key) {
             case "low":
-                priority = (
+                return (
                     <Box className={classes.selectedContainer}>
                         <SignalCellularNullIcon className={classes.icon} />
                         <Typography
@@ -59,9 +53,8 @@ export default function Priority({ rfcInfo }) {
                         </Typography>
                     </Box>
                 )
-                break
             case "medium":
-                priority = (
+                return (
                     <Box className={classes.selectedContainer}>
                         <SignalCellular3BarIcon className={classes.icon} />
                         <Typography
@@ -72,9 +65,8 @@ export default function Priority({ rfcInfo }) {
                         </Typography>
                     </Box>
                 )
-                break
             case "high":
-                priority = (
+                return (
                     <Box className={classes.selectedContainer}>
                         <SignalCellular4BarIcon className={classes.icon} />
                         <Typography
@@ -87,7 +79,7 @@ export default function Priority({ rfcInfo }) {
                 )
                 break
             case "urgent":
-                priority = (
+                return (
                     <Box className={classes.selectedContainer}>
                         <SignalCellularConnectedNoInternet4BarIcon
                             className={classes.icon}
@@ -100,86 +92,43 @@ export default function Priority({ rfcInfo }) {
                         </Typography>
                     </Box>
                 )
-                break
 
             default:
                 break
         }
     }
 
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget)
-    }
+    const [selectedPriority, setSelectedPriority] = useState("")
+    const [priorityItems, setPriorityItems] = useState([
+        { key: "low", label: "Low", icon: "low" },
+        { key: "medium", label: "Medium", icon: "medium" },
+        { key: "high", label: "High", icon: "high" },
+        { key: "urgent", label: "Urgent", icon: "urgent" }
+    ])
+    const [staticPriority, setStaticPriority] = useState("")
+    useEffect(() => {
+        setStaticPriority(currentStatus(selectedPriority.key))
+        updateRfcPriority(rfcInfo.id, selectedPriority.key)
+    }, [selectedPriority, rfcInfo])
 
-    const handleClose = (event) => {
-        setCurrentSelection(event.currentTarget.dataset.selection)
-        currentStatus()
-        setAnchorEl(null)
-        updateRfcPriority(rfcInfo.id, event.currentTarget.dataset.selection)
-    }
-    currentStatus()
+    useEffect(() => {
+        let initialPriority = priorityItems.filter(
+            (item) => item.key === rfcInfo.priority
+        )
+        setStaticPriority(currentStatus(initialPriority[0].key))
+    }, [])
 
     return (
         <Box className={classes.container}>
             <Typography variant="caption" className={classes.sectionHeader}>
-                Status
+                Priority
             </Typography>
-            <Box
-                aria-controls="priority-menu"
-                aria-haspopup="true"
-                onClick={handleClick}
-                className={classes.statusContainer}
-            >
-                {priority}
-            </Box>
-            <Menu
-                id="priority-menu"
-                anchorEl={anchorEl}
-                keepMounted
-                open={Boolean(anchorEl)}
-                onClose={handleClose}
-            >
-                <MenuItem
-                    className={classes.icon}
-                    onClick={handleClose}
-                    data-selection="low"
-                >
-                    <SignalCellularNullIcon />
-                    <Typography variant="caption" className={classes.menuText}>
-                        Low
-                    </Typography>
-                </MenuItem>
-                <MenuItem
-                    className={classes.icon}
-                    onClick={handleClose}
-                    data-selection="medium"
-                >
-                    <SignalCellular3BarIcon />
-                    <Typography variant="caption" className={classes.menuText}>
-                        Medium
-                    </Typography>
-                </MenuItem>
-                <MenuItem
-                    className={classes.icon}
-                    onClick={handleClose}
-                    data-selection="high"
-                >
-                    <SignalCellular4BarIcon />
-                    <Typography variant="caption" className={classes.menuText}>
-                        High
-                    </Typography>
-                </MenuItem>
-                <MenuItem
-                    className={classes.icon}
-                    onClick={handleClose}
-                    data-selection="urgent"
-                >
-                    <SignalCellularConnectedNoInternet4BarIcon />
-                    <Typography variant="caption" className={classes.menuText}>
-                        Urgent
-                    </Typography>
-                </MenuItem>
-            </Menu>
+            <FlexSelect
+                placeholder="Priority..."
+                setSelectedItem={setSelectedPriority}
+                items={priorityItems}
+                clickableComponent={staticPriority}
+            />
         </Box>
     )
 }

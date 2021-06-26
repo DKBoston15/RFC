@@ -77,16 +77,21 @@ export default function DateSelect({ date, setDate }) {
     }
 
     return (
-        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+        <MuiPickersUtilsProvider
+            utils={DateFnsUtils}
+            aria-controls="simple-menu"
+            aria-haspopup="true"
+            onClick={handleClick}
+        >
             <ThemeProvider theme={materialTheme}>
-                <Button
+                {/* <Button
                     aria-controls="simple-menu"
                     aria-haspopup="true"
                     onClick={handleClick}
                     className={classes.button}
                 >
                     Open Menu
-                </Button>
+                </Button> */}
                 <Menu
                     id="simple-menu"
                     anchorEl={anchorEl}
