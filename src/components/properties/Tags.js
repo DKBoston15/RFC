@@ -80,7 +80,6 @@ export default function Tags({ rfcInfo, workspaceTags, workspaceID }) {
 
     useEffect(() => {
         if (selectedItem) {
-            console.log(selectedItem)
             setChipData([...chipData, selectedItem])
             const updateRfc = async () => {
                 await updateRfcTag(rfcInfo.id, [...chipData, selectedItem])
@@ -91,7 +90,6 @@ export default function Tags({ rfcInfo, workspaceTags, workspaceID }) {
                     currentWorkspaceTags.tags,
                     [...chipData, selectedItem]
                 )
-                console.log(unusedTags)
                 setAvailableTags(unusedTags.sort(compare))
             }
             updateRfc()
@@ -101,11 +99,8 @@ export default function Tags({ rfcInfo, workspaceTags, workspaceID }) {
 
     const addNewWorkspaceTag = async () => {
         setSelectedItem(createdItem)
-        console.log(createdItem)
         const newTagArr = [...chipData, ...availableTags, createdItem]
-        console.log(newTagArr)
         await addWorkspaceTags(workspaceID, newTagArr)
-        console.log("New Tag Added")
     }
 
     useEffect(() => {
@@ -115,26 +110,21 @@ export default function Tags({ rfcInfo, workspaceTags, workspaceID }) {
     }, [createdItem])
 
     const handleDelete = async (chipToDelete) => {
-        console.log(chipToDelete)
         setChipData((chips) =>
             chips.filter((chip) => chip.key !== chipToDelete.key)
         )
         const newRfcTagArr = chipData.filter(
             (chip) => chip.key !== chipToDelete.key
         )
-        console.log(newRfcTagArr)
         await updateRfcTag(rfcInfo.id, newRfcTagArr)
 
         // Update Unused Tags
         const currentRfcTags = await getRfc(rfcInfo.id)
         const currentWorkspaceTags = await getWorkspaceTags(workspaceID)
-        console.log(currentRfcTags[0].tags)
-        console.log(availableTags)
         const unusedTags = filterByReference(
             currentWorkspaceTags.tags,
             currentRfcTags[0].tags
         )
-        console.log(unusedTags)
         setAvailableTags(unusedTags.sort(compare))
     }
 

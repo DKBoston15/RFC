@@ -72,7 +72,6 @@ export default function Project({ rfcInfo, workspaceID }) {
         const getData = async () => {
             // Get Current Project
             let currentProject = await getProject(rfcInfo.project_id)
-            console.log(currentProject)
             if (currentProject[0]) {
                 setStaticProject(currentProject[0].name)
             }

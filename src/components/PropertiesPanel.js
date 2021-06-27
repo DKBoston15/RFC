@@ -87,7 +87,7 @@ export default function PropertiesPanel({
     }
     return (
         <>
-            {rfcInfo && (
+            {rfcInfo && workspaceID && workspaceTags && (
                 <Box className={classes.panel}>
                     <CopyToClipboard
                         text={`http://localhost:3000/dashboard/${rfcInfo.id}`}
