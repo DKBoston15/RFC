@@ -111,7 +111,10 @@ export default function PropertiesPanel({
                                 variant="caption"
                                 className={classes.propertyHeader}
                             >
-                                <Assignee rfcInfo={rfcInfo} />
+                                <Assignee
+                                    rfcInfo={rfcInfo}
+                                    workspaceID={workspaceID}
+                                />
                             </Typography>
                         </Box>
                     </Box>

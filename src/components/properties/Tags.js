@@ -144,7 +144,6 @@ export default function Tags({ rfcInfo, workspaceTags, workspaceID }) {
                 workspaceTags.tags,
                 rfcInfo.tags
             )
-            console.log(unusedTags)
             setAvailableTags(unusedTags.sort(compare))
         }
     }, [workspaceTags, rfcInfo.tags])

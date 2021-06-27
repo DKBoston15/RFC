@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react"
 import FlexSelect from "../components/FlexSelect"
 import { makeStyles } from "@material-ui/core/styles"
-import { getUserData, getUsers } from "../utils/userUtils"
+import { getUsers } from "../utils/userUtils"
 
 import DateSelect from "../components/DateSelect"
 

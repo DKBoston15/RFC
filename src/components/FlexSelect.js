@@ -203,7 +203,7 @@ export default function FlexSelect({
                                                 />
                                             </Box>
                                         )}
-                                        {item.label}
+                                        {item.label || item.full_name}
                                     </Box>
                                 )}
                             </div>

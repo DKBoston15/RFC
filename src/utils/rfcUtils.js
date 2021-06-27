@@ -14,7 +14,7 @@ export const getRfcs = async (workspace_id) => {
 export const getRfc = async (rfc_id) => {
     const { data, error } = await supabase
         .from("rfcs")
-        .select(`name, id, status, priority, author, tags`)
+        .select(`name, id, status, priority, author, tags, assignees`)
         .eq("id", rfc_id)
     if (error) {
         return { status: "error", msg: error.message }
@@ -102,6 +102,18 @@ export const updateRfcTag = async (rfcID, tags) => {
     const { data, error } = await supabase
         .from("rfcs")
         .update({ tags: tags })
+        .eq("id", rfcID)
+    if (error) {
+        console.log(error)
+        return { status: "error", msg: error.message }
+    }
+    return data
+}
+
+export const updateRfcAssignees = async (rfcID, assignees) => {
+    const { data, error } = await supabase
+        .from("rfcs")
+        .update({ assignees: assignees })
         .eq("id", rfcID)
     if (error) {
         console.log(error)
