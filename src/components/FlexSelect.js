@@ -42,9 +42,9 @@ const iconSelector = {
 }
 
 const useStyles = makeStyles({
-    // button: {
-    //     color: "white"
-    // },
+    button: {
+        cursor: "pointer"
+    },
     menuContainer: {
         display: "flex",
         flexDirection: "column",

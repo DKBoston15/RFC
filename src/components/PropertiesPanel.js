@@ -10,6 +10,7 @@ import Author from "./properties/Author"
 import Tags from "./properties/Tags"
 import Assignee from "./properties/Assignee"
 import DueDate from "./properties/DueDate"
+import Project from "./properties/Project"
 
 const useStyles = makeStyles({
     panel: {
@@ -126,7 +127,10 @@ export default function PropertiesPanel({
                                 variant="caption"
                                 className={classes.propertyHeader}
                             >
-                                Project
+                                <Project
+                                    rfcInfo={rfcInfo}
+                                    workspaceID={workspaceID}
+                                />
                             </Typography>
                         </Box>
                         <Box>
