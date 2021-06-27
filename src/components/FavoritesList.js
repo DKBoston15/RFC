@@ -3,6 +3,7 @@ import { Box, Button, Typography } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
 import Star from "@material-ui/icons/Star"
 import { getFavoriteRfcs } from "../utils/rfcUtils"
+import { Link, useHistory } from "react-router-dom"
 
 const useStyles = makeStyles({
     searchButton: {
@@ -29,15 +30,23 @@ export default function FavoritesList({ user }) {
         }
         getFavoriteRfcsFunc()
     }, [user.id])
+    const history = useHistory()
+    const goToPage = (rfc_id) => {
+        history.push(`/dashboard/${rfc_id}`)
+    }
 
     return (
         <>
             {rfcArray.map((rfc) => (
                 <Box key={rfc.id}>
                     <Button
+                        onClick={() => goToPage(rfc.id)}
                         startIcon={
                             <Star
-                                style={{ color: "#FFC107", fontSize: "16px" }}
+                                style={{
+                                    color: "#FFC107",
+                                    fontSize: "16px"
+                                }}
                             />
                         }
                         className={classes.searchButton}

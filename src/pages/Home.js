@@ -4,7 +4,7 @@ import { Button, Box, Typography } from "@material-ui/core"
 import { useHistory, Link } from "react-router-dom"
 import Logo from "../images/logo.svg"
 import { useAuth } from "../config/auth"
-import { addUser, getUserData } from "../utils/userUtils"
+import { addUser, getUserData, updateUserInfo } from "../utils/userUtils"
 import Snackbar from "@material-ui/core/Snackbar"
 import Alert from "@material-ui/lab/Alert"
 import { Helmet } from "react-helmet"
@@ -80,6 +80,13 @@ export default function Home() {
                 console.log(user)
                 let userData = await getUserData(user.id)
                 console.log("userdata", userData)
+                if (user.user_metadata.full_name) {
+                    await updateUserInfo(
+                        user.id,
+                        user.user_metadata.full_name,
+                        user.user_metadata.avatar_url
+                    )
+                }
                 if (userData.status !== "error" && userData.length === 0) {
                     if (user.id) {
                         addUser(user.id)

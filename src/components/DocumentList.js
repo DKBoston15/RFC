@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { Box, Button, Typography } from "@material-ui/core"
+import { Link } from "react-router-dom"
 import { makeStyles } from "@material-ui/core/styles"
 import { getDocuments } from "../utils/rfcUtils"
 import TreeView from "@material-ui/lab/TreeView"
@@ -47,15 +48,18 @@ export default function DocuemntList({ user }) {
                 {rfcArray &&
                     rfcArray.map((rfc) => (
                         <TreeItem
-                            nodeId={Math.random()}
+                            nodeId={`${Math.random()}`}
                             key={rfc.id}
                             label={rfc.name}
                         >
                             {rfc.rfcs.map((item) => (
-                                <TreeItem
-                                    nodeId={Math.random()}
-                                    label={item.name}
-                                />
+                                <Link to={`/dashboard/${item.id}`}>
+                                    <TreeItem
+                                        nodeId={item.id}
+                                        label={item.name}
+                                        key={item.id}
+                                    />
+                                </Link>
                             ))}
                         </TreeItem>
                     ))}

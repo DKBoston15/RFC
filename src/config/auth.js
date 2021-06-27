@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect, createContext } from "react"
 import { supabase } from "./supabase"
-// const url = "http://localhost:3000/"
-const url = "https://pensive-banach-d9d548.netlify.app/"
+const url = "http://localhost:3000/"
+// const url = "https://pensive-banach-d9d548.netlify.app/"
 
 // create a context for authentication
 const AuthContext = createContext()
@@ -12,7 +12,6 @@ export const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
-        console.log("Context Loading")
         // get session data if there is an active session
         const session = supabase.auth.session()
 
@@ -51,10 +50,6 @@ export const AuthProvider = ({ children }) => {
             supabase.auth.api.resetPasswordForEmail(data, {
                 redirectTo: `${url}reset-password`
             }),
-        inviteUser: (data) =>
-            supabase.auth.api.inviteUserByEmail(
-                "dakotabrownag+test10@gmail.com"
-            ),
         user
     }
 
