@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react"
 import { makeStyles } from "@material-ui/core/styles"
+import { Box } from "@material-ui/core"
+import { Link } from "react-router-dom"
 import { AgGridColumn, AgGridReact } from "ag-grid-react"
 import { getRfcs } from "../utils/rfcUtils"
 import WbIridescentIcon from "@material-ui/icons/WbIridescent"
@@ -53,6 +55,10 @@ const useStyles = makeStyles({
         marginTop: "0.2em",
         fontSize: "2.5em",
         color: "#9E9E9E"
+    },
+    link: {
+        textDecoration: "none",
+        color: "black"
     }
 })
 
@@ -88,18 +94,30 @@ export default function FlexSelectTest() {
             headerName: "Status",
             field: "status",
             cellRendererFramework: (params) =>
-                currentStatus(params.data.status.toLowerCase()),
-            width: "100"
+                currentStatus(params.data.status.toLowerCase())
         },
-        { headerName: "Document Name", field: "name" },
-        { headerName: "", field: "due_date", width: "125" },
+        {
+            headerName: "Document Name",
+            field: "name",
+            filter: true,
+            sortable: true.valueOf,
+            width: 796,
+            cellRendererFramework: (params) => (
+                <Link
+                    className={classes.link}
+                    to={`/dashboard/${params.data.id}`}
+                >
+                    {params.data.name}
+                </Link>
+            )
+        },
+        { headerName: "", field: "due_date" },
         {
             headerName: "",
             field: "author",
             cellRendererFramework: (params) => (
                 <SmallUserAvatar authorID={params.data.author} />
-            ),
-            width: "10"
+            )
         }
     ]
     const [rowData, setRowData] = useState([])
@@ -121,7 +139,7 @@ export default function FlexSelectTest() {
             />
             <div
                 className="ag-theme-material"
-                style={{ height: "30em", width: "38em" }}
+                style={{ height: "30em", width: "100%" }}
             >
                 <AgGridReact rowData={rowData} columnDefs={columnDefs}>
                     <AgGridColumn field="status"></AgGridColumn>
