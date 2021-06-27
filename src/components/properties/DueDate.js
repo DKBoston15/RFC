@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react"
 import { Box, Typography } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
+import InsertInvitationIcon from "@material-ui/icons/InsertInvitation"
 
 import DateSelect from "../DateSelect"
 
@@ -30,6 +31,14 @@ const useStyles = makeStyles({
     },
     sectionHeader: {
         width: "5em"
+    },
+    staticContainer: {
+        display: "flex",
+        alignItems: "center"
+    },
+    icon: {
+        fontSize: "16px",
+        marginRight: ".5em"
     }
 })
 
@@ -56,7 +65,12 @@ export default function DueDate({ rfcInfo }) {
             <DateSelect
                 date={date}
                 setDate={setDate}
-                clickableComponent={staticDate}
+                clickableComponent={
+                    <Box className={classes.staticContainer}>
+                        <InsertInvitationIcon className={classes.icon} />
+                        {staticDate}
+                    </Box>
+                }
             />
         </Box>
     )

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react"
 import { Box, Typography } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
+import PermMediaIcon from "@material-ui/icons/PermMedia"
 
 import FlexSelect from "../FlexSelect"
 
@@ -35,6 +36,14 @@ const useStyles = makeStyles({
     },
     sectionHeader: {
         width: "5em"
+    },
+    staticContainer: {
+        display: "flex",
+        alignItems: "center"
+    },
+    icon: {
+        fontSize: "16px",
+        marginRight: ".5em"
     }
 })
 
@@ -127,7 +136,12 @@ export default function Project({ rfcInfo, workspaceID }) {
                 placeholder="Project..."
                 setSelectedItem={setSelectedProject}
                 items={projects}
-                clickableComponent={staticProject}
+                clickableComponent={
+                    <Box className={classes.staticContainer}>
+                        <PermMediaIcon className={classes.icon} />
+                        {staticProject}
+                    </Box>
+                }
                 allowCreation={true}
                 setCreatedItem={setCreatedItem}
             />
