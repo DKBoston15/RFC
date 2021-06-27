@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react"
 import { Avatar, Badge } from "@material-ui/core"
 import { withStyles, makeStyles } from "@material-ui/core/styles"
 import { randomColor } from "../utils/utils"
+import { getUserData } from "../utils/userUtils"
 
 const StyledBadge = withStyles((theme) => ({
     badge: {
@@ -39,22 +40,44 @@ const useStyles = makeStyles({
     }
 })
 
-export default function SmallUserAvatar({ author }) {
+export default function SmallUserAvatar({ author, authorID }) {
     const classes = useStyles()
     const [userName, setUserName] = useState("")
     const [userImage, setUserImage] = useState("")
+    useEffect(() => {
+        if (author) {
+            const getName = async (name) => {
+                const matches = name.match(/\b(\w)/g)
+                setUserName(matches.join(""))
+            }
+            console.log(author)
+            if (author[0].avatar_url) {
+                setUserImage(author[0].avatar_url)
+            }
+            if (author[0].full_name) {
+                getName(author[0].full_name)
+            }
+        }
+    }, [author])
+
     useEffect(() => {
         const getName = async (name) => {
             const matches = name.match(/\b(\w)/g)
             setUserName(matches.join(""))
         }
-        if (author[0].avatar_url) {
-            setUserImage(author[0].avatar_url)
+        const getUser = async (authorID) => {
+            console.log(authorID)
+            let userData = await getUserData(authorID)
+            console.log(userData)
+            if (userData[0].avatar_url) {
+                setUserImage(userData[0].avatar_url)
+            }
+            if (userData[0].full_name) {
+                getName(userData[0].full_name)
+            }
         }
-        if (author[0].full_name) {
-            getName(author[0].full_name)
-        }
-    }, [author])
+        getUser(authorID)
+    }, [authorID])
 
     return (
         <StyledBadge

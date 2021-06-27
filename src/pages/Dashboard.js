@@ -14,6 +14,7 @@ import { Helmet } from "react-helmet"
 import "./dashboard_styles.scss"
 import { getRfc, getRfcs } from "../utils/rfcUtils"
 import { getWorkspaceID, getWorkspaceTags } from "../utils/workspaceUtils"
+import DashboardGrid from "../components/DashboardGrid"
 
 const useStyles = makeStyles({})
 
@@ -66,12 +67,20 @@ const Dashboard = ({ match }) => {
             )}
             {!rfcInfo && rfcList && (
                 <div>
-                    Dashboard
+                    {/* Dashboard
                     {rfcList.map((rfc) => (
                         <Link to={`dashboard/${rfc.id}`}>
                             <Button key={rfc.id}>{rfc.id}</Button>
                         </Link>
-                    ))}
+                    ))} */}
+                    <div class="mainContainer">
+                        <div class="mainSidebar">
+                            <Sidebar user={user} signOut={signOut} />
+                        </div>
+                        <div class="mainContent">
+                            <DashboardGrid />
+                        </div>
+                    </div>
                 </div>
             )}
         </>

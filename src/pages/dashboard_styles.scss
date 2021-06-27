@@ -28,3 +28,29 @@
     position: sticky;
     top: 0;
 }
+
+.mainContainer {
+    display: grid;
+    grid-template-columns: 20em 83.1%;
+    grid-template-rows: 1fr;
+    gap: 0px 0px;
+    grid-auto-flow: row;
+    justify-items: stretch;
+    grid-template-areas: "Sidebar Content";
+    height: 100vh;
+    background-color: white !important;
+    overflow: hidden;
+}
+
+.mainSidebar {
+    grid-area: Sidebar;
+    align-self: start;
+    position: sticky;
+    top: 0;
+}
+
+.mainContent {
+    grid-area: Content;
+    color: black;
+    width: 100%;
+}
