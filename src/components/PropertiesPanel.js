@@ -9,6 +9,7 @@ import Priority from "./properties/Priority"
 import Author from "./properties/Author"
 import Tags from "./properties/Tags"
 import Assignee from "./properties/Assignee"
+import DueDate from "./properties/DueDate"
 
 const useStyles = makeStyles({
     panel: {
@@ -133,7 +134,7 @@ export default function PropertiesPanel({
                                 variant="caption"
                                 className={classes.propertyHeader}
                             >
-                                Due Date
+                                <DueDate rfcInfo={rfcInfo} />
                             </Typography>
                         </Box>
                     </Box>

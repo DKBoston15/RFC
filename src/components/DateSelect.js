@@ -12,7 +12,7 @@ import lightBlue from "@material-ui/core/colors/lightBlue"
 
 const useStyles = makeStyles({
     button: {
-        color: "white"
+        cursor: "pointer"
     },
     menuContainer: {
         display: "flex",
@@ -63,7 +63,7 @@ const materialTheme = createMuiTheme({
     }
 })
 
-export default function DateSelect({ date, setDate }) {
+export default function DateSelect({ date, setDate, clickableComponent }) {
     const classes = useStyles()
 
     const [anchorEl, setAnchorEl] = useState(null)
@@ -76,22 +76,35 @@ export default function DateSelect({ date, setDate }) {
         setAnchorEl(null)
     }
 
+    const onChange = (date) => {
+        handleClose()
+        console.log(date)
+        setDate(date)
+    }
+
     return (
-        <MuiPickersUtilsProvider
-            utils={DateFnsUtils}
-            aria-controls="simple-menu"
-            aria-haspopup="true"
-            onClick={handleClick}
-        >
+        <MuiPickersUtilsProvider utils={DateFnsUtils}>
             <ThemeProvider theme={materialTheme}>
-                {/* <Button
-                    aria-controls="simple-menu"
-                    aria-haspopup="true"
-                    onClick={handleClick}
-                    className={classes.button}
-                >
-                    Open Menu
-                </Button> */}
+                {clickableComponent && (
+                    <Box
+                        aria-controls="simple-menu"
+                        aria-haspopup="true"
+                        onClick={handleClick}
+                    >
+                        {clickableComponent}
+                    </Box>
+                )}
+                {!clickableComponent && (
+                    <Box
+                        aria-controls="simple-menu"
+                        aria-haspopup="true"
+                        onClick={handleClick}
+                        className={classes.button}
+                    >
+                        + Add Due Date
+                    </Box>
+                )}
+
                 <Menu
                     id="simple-menu"
                     anchorEl={anchorEl}
@@ -106,7 +119,7 @@ export default function DateSelect({ date, setDate }) {
                             variant="static"
                             openTo="date"
                             value={date}
-                            onChange={setDate}
+                            onChange={onChange}
                         />
                     </Box>
                 </Menu>
