@@ -35,7 +35,8 @@ const useStyles = makeStyles({
         alignItems: "center"
     },
     sectionHeader: {
-        width: "5em"
+        width: "5em",
+        marginRight: "1em"
     },
     staticContainer: {
         display: "flex",

@@ -11,12 +11,12 @@ const useStyles = makeStyles({
         alignItems: "center"
     },
     statusContainer: {
-        marginLeft: ".3em",
         display: "flex",
         alignItems: "center"
     },
     sectionHeader: {
-        width: "4em"
+        width: "5em",
+        marginRight: "1em"
     },
     authorName: {
         marginLeft: "0.4em"

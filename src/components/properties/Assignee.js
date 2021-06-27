@@ -10,7 +10,6 @@ import SmallUserAvatar from "../SmallUserAvatar"
 
 const useStyles = makeStyles(() => ({
     statusContainer: {
-        marginLeft: "2.5em",
         display: "flex",
         flexDirection: "column"
     },
@@ -28,7 +27,8 @@ const useStyles = makeStyles(() => ({
         margin: "0.2em"
     },
     sectionHeader: {
-        width: "4em"
+        width: "5em",
+        marginRight: "1em"
     },
     container: {
         width: "25em",
