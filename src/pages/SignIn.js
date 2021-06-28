@@ -10,6 +10,7 @@ import Logo from "../images/logo.svg"
 
 const useStyles = makeStyles({
     root: {
+        color: "white",
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-evenly",
