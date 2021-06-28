@@ -10,6 +10,11 @@ import ChevronRightIcon from "@material-ui/icons/ChevronRight"
 import "./tree_styles/styles.scss"
 
 const useStyles = makeStyles({
+    root: {
+        "& .MuiTreeItem-iconContainer svg": {
+            fill: "white"
+        }
+    },
     searchButton: {
         color: "white",
         textAlign: "left",

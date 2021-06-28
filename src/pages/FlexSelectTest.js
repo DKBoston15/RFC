@@ -1,135 +1,31 @@
-import React, { useState, useEffect } from "react"
-import { makeStyles } from "@material-ui/core/styles"
-import { AgGridColumn, AgGridReact } from "ag-grid-react"
-import { getRfcs } from "../utils/rfcUtils"
-import WbIridescentIcon from "@material-ui/icons/WbIridescent"
-import PlayCircleOutlineIcon from "@material-ui/icons/PlayCircleOutline"
-import ScheduleIcon from "@material-ui/icons/Schedule"
-import UpdateIcon from "@material-ui/icons/Update"
-import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline"
-import HighlightOffIcon from "@material-ui/icons/HighlightOff"
-import ArchiveOutlinedIcon from "@material-ui/icons/ArchiveOutlined"
+// import React, { useState, useEffect } from "react"
+// import { makeStyles } from "@material-ui/core/styles"
+// import Modal from "../components/Modal"
+// import { Box, Typography } from "@material-ui/core"
 
-import SmallUserAvatar from "../components/SmallUserAvatar"
+// const useStyles = makeStyles({
+//     modalStyles: {
+//         position: "fixed",
+//         top: "50%",
+//         left: "50%",
+//         transform: "translate(-50%, -50%)",
+//         backgroundColor: "#fff",
+//         padding: "50px",
+//         zIndex: 1000
+//     }
+// })
 
-import "ag-grid-community/dist/styles/ag-grid.css"
-import "ag-grid-community/dist/styles/ag-theme-material.css"
+// export default function FlexSelectTest() {
+//     const [isOpen, setIsOpen] = useState(false)
+//     const classes = useStyles()
 
-const useStyles = makeStyles({
-    text: {
-        color: "white !important"
-    },
-    discoveryIcon: {
-        marginTop: "0.2em",
-        fontSize: "2.5em",
-        color: "#219653"
-    },
-    todoIcon: {
-        marginTop: "0.2em",
-        fontSize: "2.5em",
-        color: "#2196F3"
-    },
-    inProgressIcon: {
-        marginTop: "0.2em",
-        fontSize: "2.5em",
-        color: "#FFC107"
-    },
-    inReviewIcon: {
-        marginTop: "0.2em",
-        fontSize: "2.5em",
-        color: "#9B51E0"
-    },
-    completeIcon: {
-        marginTop: "0.2em",
-        fontSize: "2.5em",
-        color: "#00C853"
-    },
-    onHoldIcon: {
-        marginTop: "0.2em",
-        fontSize: "2.5em",
-        color: "#C62828"
-    },
-    archivedIcon: {
-        marginTop: "0.2em",
-        fontSize: "2.5em",
-        color: "#9E9E9E"
-    }
-})
-
-export default function FlexSelectTest() {
-    const classes = useStyles()
-
-    const currentStatus = (key) => {
-        switch (key) {
-            case "discovery":
-                return <WbIridescentIcon className={classes.discoveryIcon} />
-            case "todo":
-                return <PlayCircleOutlineIcon className={classes.todoIcon} />
-            case "in-progress":
-                return <ScheduleIcon className={classes.inProgressIcon} />
-            case "in-review":
-                return <UpdateIcon className={classes.inReviewIcon} />
-            case "complete":
-                return (
-                    <CheckCircleOutlineIcon className={classes.completeIcon} />
-                )
-            case "on_hold":
-                return <HighlightOffIcon className={classes.onHoldIcon} />
-            case "archived":
-                return <ArchiveOutlinedIcon className={classes.archivedIcon} />
-
-            default:
-                break
-        }
-    }
-
-    const columnDefs = [
-        {
-            headerName: "Status",
-            field: "status",
-            cellRendererFramework: (params) =>
-                currentStatus(params.data.status.toLowerCase()),
-            width: "100"
-        },
-        { headerName: "Document Name", field: "name" },
-        { headerName: "", field: "due_date", width: "125" },
-        {
-            headerName: "",
-            field: "author",
-            cellRendererFramework: (params) => (
-                <SmallUserAvatar authorID={params.data.author} />
-            ),
-            width: "10"
-        }
-    ]
-    const [rowData, setRowData] = useState([])
-
-    useEffect(() => {
-        const getData = async () => {
-            const data = await getRfcs("58471174-46de-4448-8f9c-ba6c777d39e1")
-            console.log(data)
-            setRowData(data)
-        }
-        getData()
-    }, [])
-
-    return (
-        <>
-            <link
-                href="https://fonts.googleapis.com/css?family=Roboto"
-                rel="stylesheet"
-            />
-            <div
-                className="ag-theme-material"
-                style={{ height: "30em", width: "38em" }}
-            >
-                <AgGridReact rowData={rowData} columnDefs={columnDefs}>
-                    <AgGridColumn field="status"></AgGridColumn>
-                    <AgGridColumn field="name"></AgGridColumn>
-                    <AgGridColumn field="due_date"></AgGridColumn>
-                    <AgGridColumn field="author"></AgGridColumn>
-                </AgGridReact>
-            </div>
-        </>
-    )
-}
+//     return (
+//         <div className={classes.modalStyles}>
+//             <button onClick={() => setIsOpen(true)}>Open Modal</button>
+//             <Modal open={isOpen} onClose={() => setIsOpen(false)}>
+//                 <Box>Hello</Box>
+//             </Modal>
+//             <div>Other Content</div>
+//         </div>
+//     )
+// }

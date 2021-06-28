@@ -50,7 +50,6 @@ export default function SmallUserAvatar({ author, authorID }) {
                 const matches = name.match(/\b(\w)/g)
                 setUserName(matches.join(""))
             }
-            console.log(author)
             if (author[0].avatar_url) {
                 setUserImage(author[0].avatar_url)
             }
@@ -61,22 +60,22 @@ export default function SmallUserAvatar({ author, authorID }) {
     }, [author])
 
     useEffect(() => {
-        const getName = async (name) => {
-            const matches = name.match(/\b(\w)/g)
-            setUserName(matches.join(""))
-        }
-        const getUser = async (authorID) => {
-            console.log(authorID)
-            let userData = await getUserData(authorID)
-            console.log(userData)
-            if (userData[0].avatar_url) {
-                setUserImage(userData[0].avatar_url)
+        if (authorID) {
+            const getName = async (name) => {
+                const matches = name.match(/\b(\w)/g)
+                setUserName(matches.join(""))
             }
-            if (userData[0].full_name) {
-                getName(userData[0].full_name)
+            const getUser = async (authorID) => {
+                let userData = await getUserData(authorID)
+                if (userData[0].avatar_url) {
+                    setUserImage(userData[0].avatar_url)
+                }
+                if (userData[0].full_name) {
+                    getName(userData[0].full_name)
+                }
             }
+            getUser(authorID)
         }
-        getUser(authorID)
     }, [authorID])
 
     return (
