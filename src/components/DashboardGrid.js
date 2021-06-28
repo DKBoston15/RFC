@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react"
 import { makeStyles } from "@material-ui/core/styles"
-import { Box } from "@material-ui/core"
 import { Link } from "react-router-dom"
 import { AgGridColumn, AgGridReact } from "ag-grid-react"
 import { getRfcs } from "../utils/rfcUtils"
@@ -71,9 +70,9 @@ export default function FlexSelectTest() {
                 return <WbIridescentIcon className={classes.discoveryIcon} />
             case "todo":
                 return <PlayCircleOutlineIcon className={classes.todoIcon} />
-            case "in-progress":
+            case "in_progress":
                 return <ScheduleIcon className={classes.inProgressIcon} />
-            case "in-review":
+            case "in_review":
                 return <UpdateIcon className={classes.inReviewIcon} />
             case "complete":
                 return (
