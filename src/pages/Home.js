@@ -16,7 +16,8 @@ const useStyles = makeStyles({
         justifyContent: "space-evenly",
         alignItems: "center",
         height: "50vh",
-        marginTop: "8%"
+        marginTop: "8%",
+        color: "white"
     },
     logo: {
         marginBottom: "3em"
