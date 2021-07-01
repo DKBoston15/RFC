@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect, createContext } from "react"
 import { supabase } from "./supabase"
-// const url = "http://localhost:3000/"
-const url = "https://pensive-banach-d9d548.netlify.app/"
+const url = "http://localhost:3000/"
+// const url = "https://pensive-banach-d9d548.netlify.app/"
 
 // create a context for authentication
 const AuthContext = createContext()
