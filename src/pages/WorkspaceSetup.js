@@ -9,17 +9,20 @@ import InviteTeamMates from "../components/InviteTeamates"
 
 const useStyles = makeStyles({
     container: {
-        margin: "0 2em 0 2em"
+        margin: "0 2em 0 2em",
+        color: "white"
     },
     grayText: {
         color: "#969696"
     },
     textLeft: {
         textAlign: "left",
-        lineHeight: ".2rem"
+        lineHeight: ".2rem",
+        marginTop: "1em"
     },
     textRight: {
-        textAlign: "right"
+        textAlign: "right",
+        marginTop: "1em"
     }
 })
 

@@ -11,6 +11,7 @@ import "./input_adornment_styles/styles.scss"
 const useStyles = makeStyles({
     root: {
         display: "flex",
+        color: "white",
         flexDirection: "column",
         justifyContent: "space-evenly",
         alignItems: "center",
@@ -254,9 +255,6 @@ export default function WorkspaceForm({ setWorkspaceSetupComplete, user }) {
                 onClick={() => onSubmit()}
             >
                 Create Workspace
-            </Button>
-            <Button onClick={() => setWorkspaceSetupComplete(true)}>
-                SKIP (DEV)
             </Button>
             <Snackbar
                 open={openError}
