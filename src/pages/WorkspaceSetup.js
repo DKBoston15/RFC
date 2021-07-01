@@ -22,15 +22,20 @@ const useStyles = makeStyles({
     },
     textRight: {
         textAlign: "right",
-        marginTop: "1em"
+        marginTop: "1em",
+        cursor: "pointer"
     }
 })
 
 export default function WorkspaceSetup() {
     const classes = useStyles()
-    const { user } = useAuth()
+    const { user, signOut } = useAuth()
     const [workspaceSetupComplete, setWorkspaceSetupComplete] = useState(false)
     useEffect(() => {}, [workspaceSetupComplete])
+
+    const logout = () => {
+        signOut()
+    }
 
     return (
         <>
@@ -50,7 +55,9 @@ export default function WorkspaceSetup() {
                 </Box>
                 <Box flex={10}></Box>
                 <Box flex={1} className={classes.textRight}>
-                    <Typography variant="subtitle2">Logout</Typography>
+                    <Typography variant="subtitle2" onClick={logout}>
+                        Logout
+                    </Typography>
                 </Box>
             </Box>
             {!workspaceSetupComplete && (
