@@ -185,7 +185,7 @@ export default function InviteUserModal({ isOpen, setIsOpen }) {
                                         type="submit"
                                         disabled={loading}
                                     >
-                                        Send Invites
+                                        Send Invite
                                         {loading && (
                                             <CircularProgress
                                                 size={24}
