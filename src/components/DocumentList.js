@@ -38,6 +38,7 @@ export default function DocuemntList({ user }) {
     useEffect(() => {
         const getDocumentRfcs = async () => {
             const documentRfcs = await getDocuments(user.id)
+            console.log(documentRfcs)
             setRfcArray(documentRfcs)
         }
         getDocumentRfcs()

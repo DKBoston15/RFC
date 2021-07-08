@@ -1,4 +1,5 @@
 import { supabase } from "../config/supabase"
+import { getWorkspaceID } from "./workspaceUtils"
 
 export const getRfcs = async (workspace_id) => {
     const { data, error } = await supabase
@@ -36,12 +37,14 @@ export const getFavoriteRfcs = async (user_id) => {
         return { status: "error", msg: error.message }
     }
     const favRfcs = data[0].favorite_rfcs
-    for (let i = 0; i < favRfcs.length; i++) {
-        const name = await getRfc(favRfcs[i])
-        favoriteRfcs.push({
-            id: favRfcs[i],
-            name: name[0].name
-        })
+    if (favRfcs) {
+        for (let i = 0; i < favRfcs.length; i++) {
+            const name = await getRfc(favRfcs[i])
+            favoriteRfcs.push({
+                id: favRfcs[i],
+                name: name[0].name
+            })
+        }
     }
     return favoriteRfcs
 }
@@ -56,14 +59,40 @@ export const getDocuments = async (user_id) => {
         return { status: "error", msg: error.message }
     }
     const folderArray = []
-    for (let i = 0; i < data.length; i++) {
-        let rfcDataArray = []
-        for (let x = 0; x < data[i].rfcs.length; x++) {
-            let rfcData = await getRfc(data[i].rfcs[x])
-            rfcDataArray.push({ name: rfcData[0].name, id: data[i].rfcs[x] })
+    if (data.length === 0) {
+        const workspaceID = await getWorkspaceID(user_id)
+        const { data, error } = await supabase
+            .from("folders")
+            .select(`name, rfcs`)
+            .eq("workspace_id", workspaceID)
+        if (error) {
+            return { status: "error", msg: error.message }
         }
-        folderArray.push({ name: data[i].name, rfcs: rfcDataArray })
-        rfcDataArray = []
+        for (let i = 0; i < data.length; i++) {
+            let rfcDataArray = []
+            for (let x = 0; x < data[i].rfcs.length; x++) {
+                let rfcData = await getRfc(data[i].rfcs[x])
+                rfcDataArray.push({
+                    name: rfcData[0].name,
+                    id: data[i].rfcs[x]
+                })
+            }
+            folderArray.push({ name: data[i].name, rfcs: rfcDataArray })
+            rfcDataArray = []
+        }
+    } else {
+        for (let i = 0; i < data.length; i++) {
+            let rfcDataArray = []
+            for (let x = 0; x < data[i].rfcs.length; x++) {
+                let rfcData = await getRfc(data[i].rfcs[x])
+                rfcDataArray.push({
+                    name: rfcData[0].name,
+                    id: data[i].rfcs[x]
+                })
+            }
+            folderArray.push({ name: data[i].name, rfcs: rfcDataArray })
+            rfcDataArray = []
+        }
     }
     return folderArray
 }

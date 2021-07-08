@@ -9,15 +9,14 @@ import FlexSelect from "../FlexSelect"
 
 const useStyles = makeStyles(() => ({
     statusContainer: {
-        marginLeft: "2.5em",
         display: "flex",
         flexDirection: "column"
     },
     tagContainer: {
         display: "flex",
         flexWrap: "wrap",
-        width: "24em",
-        alignItems: "center"
+        alignItems: "center",
+        maxWidth: "90%"
     },
     chip: {
         backgroundColor: "#4F4F4F",
@@ -28,7 +27,7 @@ const useStyles = makeStyles(() => ({
     },
     sectionHeader: {
         width: "5em",
-        marginRight: "1em"
+        marginRight: "30px"
     },
     container: {
         width: "25em",
@@ -129,6 +128,7 @@ export default function Tags({ rfcInfo, workspaceTags, workspaceID }) {
     }
 
     useEffect(() => {
+        setChipData(rfcInfo.tags)
         if (workspaceTags) {
             setAvailableTags(workspaceTags.tags.sort(compare))
             const unusedTags = filterByReference(
@@ -137,7 +137,7 @@ export default function Tags({ rfcInfo, workspaceTags, workspaceID }) {
             )
             setAvailableTags(unusedTags.sort(compare))
         }
-    }, [workspaceTags, rfcInfo.tags])
+    }, [workspaceTags, rfcInfo])
 
     return (
         <Box className={classes.container}>

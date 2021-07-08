@@ -61,7 +61,7 @@ const useStyles = makeStyles({
     }
 })
 
-export default function FlexSelectTest() {
+export default function DashboardGrid({ workspaceID }) {
     const classes = useStyles()
 
     const currentStatus = (key) => {
@@ -123,7 +123,7 @@ export default function FlexSelectTest() {
 
     useEffect(() => {
         const getData = async () => {
-            const data = await getRfcs("58471174-46de-4448-8f9c-ba6c777d39e1")
+            const data = await getRfcs(workspaceID)
             console.log(data)
             setRowData(data)
         }

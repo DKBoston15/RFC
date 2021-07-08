@@ -22,6 +22,9 @@ const useStyles = makeStyles({
         "& .MuiInput-underline:after": {
             borderBottomColor: "#AEBDD1"
         },
+        "& .MuiInputBase-input": {
+            color: "white"
+        },
         "& .MuiOutlinedInput-root": {
             "& fieldset": {
                 borderColor: "#AEBDD1"

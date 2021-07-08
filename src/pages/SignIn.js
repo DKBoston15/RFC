@@ -16,12 +16,15 @@ const useStyles = makeStyles({
         justifyContent: "space-evenly",
         alignItems: "center",
         height: "50vh",
-        marginTop: "8%",
+        marginTop: "15%",
         "& label.Mui-focused": {
             color: "#AEBDD1"
         },
         "& .MuiInput-underline:after": {
             borderBottomColor: "#AEBDD1"
+        },
+        "& .MuiInputBase-input": {
+            color: "white"
         },
         "& .MuiOutlinedInput-root": {
             "& fieldset": {
@@ -82,6 +85,7 @@ const useStyles = makeStyles({
         marginTop: "2em"
     },
     link: {
+        marginTop: "1em",
         textDecoration: "none",
         color: "white",
         "&:visited": {
@@ -95,8 +99,6 @@ const useStyles = makeStyles({
         }
     }
 })
-
-// TODO: Finish setting up Sign in with Email form & validation
 
 const SignIn = () => {
     const classes = useStyles()

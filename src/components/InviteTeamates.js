@@ -13,12 +13,16 @@ const useStyles = makeStyles({
         flexDirection: "column",
         justifyContent: "space-evenly",
         alignItems: "center",
+        color: "white",
 
         "& label.Mui-focused": {
             color: "#AEBDD1"
         },
         "& .MuiInput-underline:after": {
             borderBottomColor: "#AEBDD1"
+        },
+        "& .MuiInputBase-input": {
+            color: "white"
         },
         "& .MuiOutlinedInput-root": {
             "& fieldset": {

@@ -59,7 +59,10 @@ export const getWorkspaceTags = async (workspace_id) => {
     if (workspace_error) {
         return { status: "error", msg: workspace_error.message }
     }
-    return workspace_data[0]
+    if (workspace_data) {
+        return workspace_data[0]
+    }
+    return []
 }
 
 export const addWorkspaceTags = async (workspace_id, tags) => {

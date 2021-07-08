@@ -116,7 +116,7 @@ export default function Priority({ rfcInfo }) {
             (item) => item.key === rfcInfo.priority
         )
         setStaticPriority(currentStatus(initialPriority[0].key))
-    }, [])
+    }, [rfcInfo])
 
     return (
         <Box className={classes.container}>

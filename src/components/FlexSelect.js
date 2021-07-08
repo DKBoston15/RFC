@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect } from "react"
-import Button from "@material-ui/core/Button"
 import Menu from "@material-ui/core/Menu"
 import Box from "@material-ui/core/Box"
 import InputBase from "@material-ui/core/InputBase"
@@ -51,8 +50,7 @@ const useStyles = makeStyles({
         justifyContent: "center",
         alignItems: "center",
         minWidth: "7em",
-        maxHeight: "20em",
-        overflow: "scroll"
+        maxHeight: "20em"
     },
     input: {
         width: "70%"

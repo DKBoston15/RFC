@@ -15,12 +15,15 @@ const useStyles = makeStyles({
         justifyContent: "space-evenly",
         alignItems: "center",
         height: "50vh",
-        marginTop: "8%",
+        marginTop: "15%",
         "& label.Mui-focused": {
             color: "#AEBDD1"
         },
         "& .MuiInput-underline:after": {
             borderBottomColor: "#AEBDD1"
+        },
+        "& .MuiInputBase-input": {
+            color: "white"
         },
         "& .MuiOutlinedInput-root": {
             "& fieldset": {
@@ -39,7 +42,8 @@ const useStyles = makeStyles({
     },
     input: {
         minHeight: "48px",
-        width: "22rem"
+        width: "22rem",
+        color: "white"
     },
     buttonOne: {
         color: "white",
@@ -79,10 +83,14 @@ const useStyles = makeStyles({
         justifyContent: "center",
         alignItems: "center",
         marginTop: "2em"
+    },
+    passwordInput: {
+        marginTop: "1em"
+    },
+    confirmationEmail: {
+        marginTop: "-12em"
     }
 })
-
-// TODO: Finish setting up Sign in with Email form & validation
 
 const SignIn = () => {
     const classes = useStyles()
@@ -123,7 +131,10 @@ const SignIn = () => {
             {emailConfirmation && (
                 <Box className={classes.root}>
                     <img src={Logo} alt="logo" className={classes.logo} />
-                    <Typography variant="body1">
+                    <Typography
+                        variant="body1"
+                        className={classes.confirmationEmail}
+                    >
                         Please confirm your email
                     </Typography>
                 </Box>
@@ -187,7 +198,7 @@ const SignIn = () => {
                                     onChange={onEmailChange}
                                 />
                             </Box>
-                            <Box>
+                            <Box className={classes.passwordInput}>
                                 <Typography variant="subtitle1">
                                     Password
                                 </Typography>

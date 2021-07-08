@@ -78,7 +78,7 @@ const Dashboard = ({ match }) => {
                             <Sidebar user={user} signOut={signOut} />
                         </div>
                         <div class="mainContent">
-                            <DashboardGrid />
+                            <DashboardGrid workspaceID={workspaceID} />
                         </div>
                     </div>
                 </div>

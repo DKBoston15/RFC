@@ -101,6 +101,9 @@ export default function Home() {
                     window.location.reload()
                 }
                 if (userData[0].signup_flow_complete === false) {
+                    let inviteTime = user.invited_at
+                    console.log(inviteTime)
+                    // Check if invite in last 5 minutes
                     history.push("/workspace-setup")
                 }
             }

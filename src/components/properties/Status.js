@@ -175,7 +175,7 @@ export default function Status({ rfcInfo }) {
             (item) => item.key === rfcInfo.status
         )
         setStaticStatus(currentStatus(initialStatus[0].key))
-    }, [])
+    }, [rfcInfo])
 
     return (
         <Box className={classes.container}>
